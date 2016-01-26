@@ -22,7 +22,7 @@ struct planet
 
 inline void eatline(){while(cin.get()!='\n') continue;}
 
-const int Mode = 2;
+const int Mode = 3;
 int _tmain(int argc, _TCHAR* argv[])
 {
 	cout<<fixed<<right;
@@ -138,6 +138,18 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 
 			fio.close();
+		}
+	}
+	else if(Mode == 3)
+	{
+		cout<<"this system can generate up to "<<TMP_MAX
+			<<"temporary name of up to"<<L_tmpnam<<"characters.\n";
+		char pszName[L_tmpnam]={'\0'};
+		cout<<"Here are ten names :\n";
+		for (int i=0;i<10;++i)
+		{
+			tmpnam(pszName);
+			cout<<pszName<<endl;
 		}
 	}
 	system("pause");
