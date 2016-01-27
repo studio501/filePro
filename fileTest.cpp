@@ -8,7 +8,8 @@
 #include <iomanip>
 #include <cstdlib>
 //#include <cmath>
-
+#include <sstream>
+#include <string>
 using namespace std;
 
 const char * file = "planets.data";
@@ -22,7 +23,7 @@ struct planet
 
 inline void eatline(){while(cin.get()!='\n') continue;}
 
-const int Mode = 3;
+extern const int Mode;
 int _tmain(int argc, _TCHAR* argv[])
 {
 	cout<<fixed<<right;
@@ -152,7 +153,62 @@ int _tmain(int argc, _TCHAR* argv[])
 			cout<<pszName<<endl;
 		}
 	}
+	else if(Mode == 4)//incore formatting
+	{
+		ostringstream outstr;
+
+		string hdisk;
+		cout<<"what's the name of your hard disk?";
+		getline(cin,hdisk);
+
+		int cap;
+		cout<<"waht's its capacity in GB?";
+		cin>>cap;
+
+		outstr<<"The hard disk "<<hdisk<<" has capacity of "<<cap<<" gigabytes.\n";
+		string result = outstr.str();//save result
+		cout<<result;
+	}
+	else if(Mode == 5)
+	{
+		string lit = "It was a dark_ and stormy day,and the full moon glowed brilliantly. ";
+		istringstream instr(lit);
+		string word;
+		while(instr>>word) cout<<word<<endl;
+	}
+	else if(Mode == 6)
+	{
+		int a = 13;
+		cout<<(a>>1)<<"  "<<a;
+	}
+	else if(Mode == 7)
+	{
+		class Example
+		{
+			public:
+				int feet;
+				int inches;
+				Example(int a)
+					:inches(a)
+				{
+
+				}
+				Example()
+					:inches(0)
+				{
+
+				}
+		};
+
+		int Example::*pt = &Example::inches;
+		Example ob1(111);
+		Example ob2(222);
+		Example *pq = new Example(333);
+		cout<<ob1.*pt<<endl;
+		cout<<ob2.*pt<<endl;
+		cout<<pq->*pt<<endl;
+	}
 	system("pause");
 	return 0;
 }
-
+const int Mode = 7;
