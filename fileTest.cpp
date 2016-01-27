@@ -23,8 +23,7 @@ struct planet
 
 inline void eatline(){while(cin.get()!='\n') continue;}
 
-extern const int Mode;
-int _tmain(int argc, _TCHAR* argv[])
+int fileFunc(int Mode)
 {
 	cout<<fixed<<right;
 	planet pl;
@@ -243,8 +242,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		default:
 			break;
 	}
-
-	system("pause");
 	return 0;
 }
-const int Mode = 9;
+
