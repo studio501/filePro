@@ -5,11 +5,12 @@
 
 #include <iostream>
 
+#include "DSList.h"
+
 using namespace std;
-int fileFunc(int m = 2);
+//int fileFunc(int m = 2);
 int _tmain(int argc, _TCHAR* argv[])
 {
-	fileFunc();
 	system("pause");
 	return 0;
 }
