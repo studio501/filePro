@@ -7,58 +7,14 @@
 
 #include "DSList.h"
 #include <string>
+
+#include "commonFunc.h"
 using namespace std;
 //int fileFunc(int m = 2);
 int _tmain(int argc, _TCHAR* argv[])
 {
-	string a("Hello ");
-	string b("World");
-
-	cout<<computeSum(a,b)<<endl;
-	int arr1[] = {1,2,56,43,234,5667,237};
-	test_arr(arr1,sizeof(arr1)/sizeof(int));
-	
-	double arr2[] = {22,43.4,89.09,55.67,78.32};
-	test_arr(arr2,sizeof(arr2)/sizeof(double));
-
-	string arr3[] = {"asjkfn","35saf","sdfnjs..",",;,;l"};
-	test_arr(arr3,sizeof(arr3)/sizeof(string));
-
-	TemplateTest<int> tt;
-	tt.bFunction(12);
-	tt.bFunction(13);
-
-	tt.printTemplateTest();
-
-	NoTemplate tn;
-	tn.printSomething(897);
-	tn.printSomething("hahahha");
-	tn.printSomething(89.076);
-
-	/*testQueue<float> tq;
-	for(int i=0;i<2000;++i)
-	{
-		tq.push(3.14*0.13456*i);
-	}
-	
-	tq.visit();
-
-	float temp;
-	for(int i=0;i<501;++i)
-	{
-		if( !tq.get(temp)) cout<<"queue is already be empty!\n";
-		
-	}
-	cout<<"\n last size is "<<tq.size();*/
-
-	cout<<StringOperate::ltrim(string("                     Hello~~"));
-
-	cout<<StringOperate::rtrim(string("Hello~~                  "));
-
-	cout<<StringOperate::toUpper(string("askdfnasdfn"));
-	cout<<StringOperate::toLower(string("AKNFAKDSNF"));
-
-	cout<<endl<<StringOperate::toString(12.56f);
+	cout<<diffCompute1()<<endl;
+	cout<<diffCompute2()<<endl;
 	system("pause");
 	return 0;
 }

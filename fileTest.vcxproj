@@ -79,6 +79,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="commonFunc.h" />
     <ClInclude Include="DSList.h" />
     <ClInclude Include="DSList.hpp" />
     <ClInclude Include="stdafx.h" />
