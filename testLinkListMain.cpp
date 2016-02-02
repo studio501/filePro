@@ -76,6 +76,55 @@ void testLinkListMain()
 	LinkList Le;
 	createListWithFile2(Le,listfile);
 	listTraverse(Le,vi_print);
+
+	testStaticList();
+
+	cout<<"\n========================================================\n";
+	LinkList LL;
+	initList_SL(LL);
+
+	for(int i=1;i<=20;++i)
+		listInsert_SL(LL,i,i);
+	listTraverse_SL(LL,vi_print);
+
+	priorElem_SL(LL,18,e);
+	cout<<e<<endl;
+
+	nextElem_SL(LL,18,e);
+	cout<<e<<endl;
+
+	listDelete_SL(LL,2,e);
+	cout<<e<<endl;
+	listTraverse_SL(LL,vi_print);
+	cout<<isEmpty_SL(LL)<<endl;
+	clearList_SL(LL);
+	cout<<isEmpty_SL(LL)<<endl;
+
+
+	for(int i=1;i<=20;++i)
+		listInsert_SL(LL,i,i);
+
+	LinkList LLb;
+	initList_SL(LLb);
+	for(int i=1;i<=10;++i)
+		listInsert_SL(LLb,i,i*i);
+	listTraverse_SL(LLb,vi_print);
+	listMerge_SL(LL,LLb);
+	listTraverse_SL(LL,vi_print);
+
+	cout<<"\n========================================================\n";
+	DuLinkList DL;
+	initList_Du(DL);
+	for(int i=1;i<=15;++i)
+		listInsert_Du(DL,i,i);
+	listTraverse_Du(DL,vi_print);
+	listTraverseBack_Du(DL,vi_print);
+
+	listDelete_Du(DL,13,e);
+	listTraverse_Du(DL,vi_print);
+	listTraverseBack_Du(DL,vi_print);
 }
+
+
 
 
