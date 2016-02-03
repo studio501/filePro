@@ -123,7 +123,81 @@ void testLinkListMain()
 	listDelete_Du(DL,13,e);
 	listTraverse_Du(DL,vi_print);
 	listTraverseBack_Du(DL,vi_print);
+
+	getElemByIndex_Du(DL,12,e);
+	cout<<e<<endl;
+
+	priorElem_Du(DL,12,e);
+	cout<<e<<endl;
+
+	nextElem_Du(DL,12,e);
+	cout<<e<<endl;
+
+	cout<<"\n===============REAL LIST LIKE THIS!!!===============================\n";
+	RLinkList RL;
+	initList_RL(RL);
+
+	Link rp;
+	for(int i=1;i<=9;++i)
+	{
+		makeNode(rp,i);
+		insertFirst(RL,RL.tail,rp);
+	}
+	listTraverse_RL(RL,vi_print);
+
+	orderInsert(RL,20,compare_absoluteless);
+	orderInsert(RL,19,compare_absoluteless);
+	orderInsert(RL,19,compare_absoluteless);
+	orderInsert(RL,18,compare_absoluteless);
+	orderInsert(RL,16,compare_absoluteless);
+	orderInsert(RL,15,compare_absoluteless);
+	listTraverse_RL(RL,vi_print);
+
+	locateElemPos_RL(RL,200,rp,compare_equal1);
+	cout<<rp->data<<endl;
+	for(int j=1;j<=4;++j)
+	{
+		deleteFirst(RL,RL.head,rp);
+		cout<<"delete: "<<rp->data<<endl;
+		listTraverse_RL(RL,vi_print);
+	}
+
+	Link rh;
+	makeNode(rp,100);
+	rp->next=NULL;
+	for(int j=4;j>=1;--j)
+	{
+		makeNode(rh,j*2);
+		rh->next=rp;
+		rp=rh;
+	}
+	appenList(RL,rh);
+	listTraverse_RL(RL,vi_print);
+
+	listInsert_RL(RL,5,999);
+	listTraverse_RL(RL,vi_print);
+
+	listBubbleSort_RL(RL,compare_less);
+	listTraverse_RL(RL,vi_print);
+
+	RLinkList RLb;
+	initList_RL(RLb);
+
+	for(int i=1;i<=9;++i)
+	{
+		makeNode(rp,i*i*i);
+		insertFirst(RLb,RLb.tail,rp);
+	}
+	listTraverse_RL(RLb,vi_print);
+
+	RLinkList RLc;
+	listMerge_RL(RL,RLb,RLc,compare_less);
+	listTraverse_RL(RLc,vi_print);
+
+	listTraverse_RL(RL,vi_print);
+	listTraverse_RL(RLb,vi_print);
 }
+
 
 
 

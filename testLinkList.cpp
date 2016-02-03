@@ -713,3 +713,337 @@ void listTraverseBack_Du(DuLinkList &L,vi_func vFunc)
 	}
 	printf("\n");
 }
+
+//分配由p指向的值为e的结点
+void makeNode(Link &p,ElemType e)
+{
+	p=(Link)malloc(sizeof(LNode));
+	if(!p) exit(0);
+	p->data = e;
+}
+
+//释放p所指的结点
+void freeNode(Link &p)
+{
+	free(p);
+	p=NULL;
+}
+
+//构造一个空的线性表
+void initList_RL(RLinkList &L)
+{
+	Link p;
+	p=(Link)malloc(sizeof(LNode));
+	if(p)
+	{
+		p->next=NULL;
+		L.head=L.tail=p;
+		L.len=0;
+	}
+	else
+		exit(0);
+}
+
+//将表L重置为空
+void clearList_RL(RLinkList &L)
+{
+	Link p,q;
+	if(L.head!=L.tail)
+	{
+		p=q=L.head->next;
+		L.head->next=NULL;
+		while(p!=L.tail)
+		{
+			p=q->next;
+			free(q);
+			q=p;
+		}
+		free(q);
+		L.tail=L.head;
+		L.len=0;
+	}
+}
+
+//销毁线性表L
+void destroyList_RL(RLinkList &L)
+{
+	clearList_RL(L);
+	freeNode(L.head);
+	L.tail=NULL;
+	L.len=0;
+}
+
+//h指向L的一个结点,把h当做头结点,将s所指结点插入在第一个结点之前
+void insertFirst(RLinkList &L,Link h,Link s)
+{
+	s->next=h->next;
+	h->next =s;
+	if(h==L.tail) L.tail=h->next;
+	++L.len;
+}
+
+//h指向L的一个结点,把h当做头结点,删除链表中的第一个结点并以q返回
+bool deleteFirst(RLinkList &L,Link h,Link &q)
+{
+	q=h->next;
+	if(q)
+	{
+		h->next = q->next;
+		if(!h->next) L.tail=h;
+		--L.len;
+		return true;
+	}
+	else return false;
+}
+
+//将s所指的一串结点链接在L的最后一个结点之后,并改变链表尾指针指向新的结点
+void appenList(RLinkList &L,Link s)
+{
+	int i=1;
+	L.tail->next=s;
+	while(s->next)
+	{
+		s=s->next;
+		++i;
+	}
+	L.tail=s;
+	L.len+=i;
+}
+
+//返回p指向的前驱位置
+Position priorPos(RLinkList &L,Link p)
+{
+	Link q;
+	q=L.head->next;
+	if(q==p) return NULL;
+	else
+	{
+		while(q->next!=p) q=q->next;
+		return q;
+	}
+}
+
+//删除尾结点并以q返回,改变L的尾指针指向新的尾结点
+bool removeList_RL(RLinkList &L,Link &q)
+{
+	Link p=L.head;
+	if(L.len==0)
+	{
+		q=NULL;
+		return false;
+	}
+	while(p->next!=L.tail)
+		p=p->next;
+	q=L.tail;
+	p->next=NULL;
+	L.tail=p;
+	--L.len;
+	return true;
+}
+
+//s所指结点插入p所指结点之前
+void insBefore(RLinkList &L,Link &p,Link s)
+{
+	Link q;
+	q=priorPos(L,p);
+	if(!q) q=L.head;
+	s->next=p;
+	q->next=s;
+	p=s;
+	++L.len;
+}
+
+//s所指结点插入p所指结点之后
+void insAfter(RLinkList &L,Link &p,Link s)
+{
+	if(p==L.tail) L.tail=s;
+	s->next=p->next;
+	p->next=s;
+	p=s;
+	++L.len;
+}
+
+//用e更新p所指的结点
+void setCurElem(Link p,ElemType e)
+{
+	p->data=e;
+}
+
+//获取p所指向的元素
+ElemType getCurElem(Link p)
+{
+	return p->data;
+}
+
+//判断L是否为空表
+bool isEmpty_RL(RLinkList &L)
+{
+	if(L.len) return false;
+	else return true;
+}
+
+//获取L的头结点
+Position getHead(RLinkList L)
+{
+	return L.head;
+}
+
+//获取L的尾结点
+Position getTail(RLinkList L)
+{
+	return L.tail;
+}
+
+//下一个位置
+Position nextPos(Link p)
+{
+	return p->next;
+}
+
+//返回第i个结点的指针
+bool locatePos(RLinkList L,int i,Link &p)
+{
+	if(i<0 || i>L.len) return false;
+	else
+	{
+		p=L.head;
+		for(int j=1;j<=i;++j)
+			p=p->next;
+		return true;
+	}
+}
+
+//返回线性表中第1个与e满足函数compare判定关系元素的位置
+Position locateElem_RL(RLinkList L,ElemType e,compare_func cFunc)
+{
+	Link p=L.head;
+	do 
+		p=p->next;
+	while(p&&!(cFunc(p->data,e)));
+	return p;
+}
+
+//遍历L
+void listTraverse_RL(RLinkList L,vi_func vFunc)
+{
+	if(L.len<=0) return;
+	Link p=L.head->next;
+	for(int j=1;j<=L.len;++j)
+	{
+		vFunc(p->data);
+		p=p->next;
+	}
+	printf("\n");
+}
+
+//按序插入e
+void orderInsert(RLinkList &L,ElemType e,compare_func cFunc)
+{
+	Link o,p,q;
+	q=L.head;
+	p=q->next;
+	while(p!=NULL&&cFunc(p->data,e))
+	{
+		q=p;
+		p=p->next;
+	}
+
+	o=(Link)malloc(sizeof(LNode));
+	o->data=e;
+	q->next=o;
+	o->next=p;
+	++L.len;
+	if(!p) L.tail=o;
+}
+
+//返回第一个与e满足判定函数的结点位置
+bool locateElemPos_RL(RLinkList L,ElemType e,Position &q,compare_func cFunc)
+{
+	Link p=L.head,pp;
+	do 
+	{
+		pp=p;
+		p=p->next;
+	} while (p&& !cFunc(p->data,e));
+
+	if(!p||!cFunc(p->data,e))
+	{
+		q=pp;
+		return false;
+	}
+	else
+	{
+		q=p;
+		return true;
+	}
+}
+
+//在第i个元素位置插入e
+bool listInsert_RL(RLinkList &L,int i,ElemType e)
+{
+	Link h,s;
+	if(!locatePos(L,i-1,h)) return false;
+	makeNode(s,e);
+	insertFirst(L,h,s);
+	return true;
+}
+
+//对表使用冒泡排序
+void listBubbleSort_RL(RLinkList &L,compare_func cFunc)
+{
+	if(L.len<=1) return;
+	Link p = L.head->next,q;
+	ElemType temp;
+	while(p!=L.tail->next)
+	{
+		q=p->next;
+		while(q!=L.tail->next)
+		{
+			if(!cFunc(p->data,q->data))
+			{
+				temp = p->data;
+				p->data=q->data;
+				q->data=temp;
+			}
+			q=q->next;
+		}
+		p=p->next;
+	}
+}
+
+//有序归并为新表
+void listMerge_RL(RLinkList &La,RLinkList &Lb,RLinkList &Lc,compare_func cFunc)
+{
+	Link ha=getHead(La),hb=getHead(Lb),pa,pb,q;
+	ElemType a,b;
+	initList_RL(Lc);
+	pa=nextPos(ha);
+	pb=nextPos(hb);
+	while(pa&&pb)
+	{
+		a=getCurElem(pa);
+		b=getCurElem(pb);
+		if(cFunc(a,b))
+		{
+			deleteFirst(La,ha,q);
+			q->next=NULL;
+			appenList(Lc,q);
+			pa=nextPos(ha);
+		}
+		else
+		{
+			deleteFirst(Lb,hb,q);
+			q->next=NULL;
+			appenList(Lc,q);
+			pb=nextPos(hb);
+		}
+	}
+	if(pa) appenList(Lc,pa);
+	else appenList(Lb,pb);
+	free(ha);
+	La.head=La.tail=NULL;
+	La.len=0;
+	free(hb);
+	Lb.head=Lb.tail=NULL;
+	Lb.len=0;
+}

@@ -11,6 +11,8 @@ struct LNode
 typedef LNode * LinkList;
 
 bool compare_equal(ElemType a,ElemType b);
+bool compare_less(ElemType a,ElemType b);
+bool compare_absoluteless(ElemType a,ElemType b);
 
 //构造空的线性表
 void initList(LinkList &L);
@@ -166,4 +168,100 @@ void listTraverse_Du(DuLinkList &L,vi_func vFunc);
 
 //逆序遍历表
 void listTraverseBack_Du(DuLinkList &L,vi_func vFunc);
+
+//实际应用中的链表
+typedef LNode *Link,*Position;
+struct RLinkList
+{
+	Link head,tail;//分别指向头,尾结点
+	int len;//表中元素个数
+};
+
+//分配由p指向的值为e的结点
+void makeNode(Link &p,ElemType e);
+
+//释放p所指的结点
+void freeNode(Link &p);
+
+//构造一个空的线性表
+void initList_RL(RLinkList &L);
+
+//将表L重置为空
+void clearList_RL(RLinkList &L);
+
+//销毁线性表L
+void destroyList_RL(RLinkList &L);
+
+//h指向L的一个结点,把h当做头结点,将s所指结点插入在第一个结点之前
+void insertFirst(RLinkList &L,Link h,Link s);
+
+//h指向L的一个结点,把h当做头结点,删除链表中的第一个结点并以q返回
+bool deleteFirst(RLinkList &L,Link h,Link &q);
+
+//将s所指的一串结点链接在L的最后一个结点之后,并改变链表尾指针指向新的结点
+void appenList(RLinkList &L,Link s);
+
+//返回p指向的前驱位置
+Position priorPos(RLinkList &L,Link p);
+
+//删除尾结点并以q返回,改变L的尾指针指向新的尾结点
+bool removeList_RL(RLinkList &L,Link &q);
+
+//s所指结点插入p所指结点之前
+void insBefore(RLinkList &L,Link &p,Link s);
+
+//s所指结点插入p所指结点之后
+void insAfter(RLinkList &L,Link &p,Link s);
+
+//用e更新p所指的结点
+void setCurElem(Link p,ElemType e);
+
+//获取p所指向的元素
+ElemType getCurElem(Link p);
+
+//判断L是否为空表
+bool isEmpty_RL(RLinkList &L);
+
+//获取L的头结点
+Position getHead(RLinkList L);
+
+//获取L的尾结点
+Position getTail(RLinkList L);
+
+//下一个位置
+Position nextPos(Link p);
+
+//返回第i个结点的指针
+bool locatePos(RLinkList L,int i,Link &p);
+
+//返回线性表中第1个与e满足函数compare判定关系元素的位置
+Position locateElem_RL(RLinkList L,ElemType e,compare_func cFunc);
+
+//遍历L
+void listTraverse_RL(RLinkList L,vi_func vFunc);
+
+//按序插入e
+void orderInsert(RLinkList &L,ElemType e,compare_func cFunc);
+
+//返回第一个与e满足判定函数的结点位置
+bool locateElemPos_RL(RLinkList L,ElemType e,Position &q,compare_func cFunc);
+
+//在第i个元素位置插入e
+bool listInsert_RL(RLinkList &L,int i,ElemType e);
+
+//对表使用冒泡排序
+void listBubbleSort_RL(RLinkList &L,compare_func cFunc);
+
+//有序归并为新表
+void listMerge_RL(RLinkList &La,RLinkList &Lb,RLinkList &Lc,compare_func cFunc);
+
+//====================================一元多项式应用====================================
+typedef struct 
+{
+	float coef;//系数
+	int expn;//指数
+}term,PoElemType;
+
+//将e 放置到表中合适的位置
+//void orderInsertMerge(RLinkList &L,PoElemType) //page 91
 #endif

@@ -26,6 +26,11 @@ bool compare_less(ElemType a,ElemType b)
 	return a <= b;
 }
 
+bool compare_absoluteless(ElemType a,ElemType b)
+{
+	return a < b;
+}
+
 void testListMain()
 {
 	SqList L;
