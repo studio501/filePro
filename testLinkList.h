@@ -169,6 +169,8 @@ void listTraverse_Du(DuLinkList &L,vi_func vFunc);
 //逆序遍历表
 void listTraverseBack_Du(DuLinkList &L,vi_func vFunc);
 
+//====================================实际应用中的链表====================================
+
 //实际应用中的链表
 typedef LNode *Link,*Position;
 struct RLinkList
@@ -262,6 +264,44 @@ typedef struct
 	int expn;//指数
 }term,PoElemType;
 
+struct LPNode
+{
+	PoElemType data;
+	LPNode *next;
+};
+typedef LPNode * LPLinkList;
+typedef LPNode *LPLink,*LPPosition;
+typedef LPLinkList polynomial;
+struct LPRLinkList
+{
+	LPLink head,tail;//分别指向头,尾结点
+	int len;//表中元素个数
+};
+
+typedef int (*compare_term_func)(term,term);
+int compare_term_status(term a,term b); //<:-1 =:0 >1
+
+//分配由p指向的值为e的结点
+void makeNode_RLP(LPLink &p,PoElemType e);
+
+//释放p所指的结点
+void freeNode_RLP(LPLink &p);
+
+//h指向L的一个结点,把h当做头结点,将s所指结点插入在第一个结点之前
+void insertFirst_RLP(LPRLinkList &L,LPLink h,LPLink s);
+
+//h指向L的一个结点,把h当做头结点,删除链表中的第一个结点并以q返回
+bool deleteFirst_RLP(LPRLinkList &L,LPLink h,LPLink &q);
+
+//返回p指向的前驱位置
+LPPosition priorPos_RLP(LPRLinkList &L,LPLink p);
+
+//返回第一个与e满足判定函数的结点位置
+bool locateElemPos_RLP(LPRLinkList L,PoElemType e,LPPosition &q,compare_term_func cFunc);
+
 //将e 放置到表中合适的位置
-//void orderInsertMerge(RLinkList &L,PoElemType) //page 91
+void orderInsertMerge(LPRLinkList &L,PoElemType e,compare_term_func cFunc); 
+
+//输入多项式所在文件和行号,建立表示一元多项的有序链表p
+void createPolyn(polynomial &P,const char *fileName,int mLine =1);
 #endif

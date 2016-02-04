@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <sys/timeb.h>
 #include <math.h>
+#include <string>
 #include <iostream>
 using namespace std;
 
@@ -61,6 +62,15 @@ double diffCompute2(int n=1234,double x= 1000)
 	ftime(&t2);
 	computeTime(t1,t2,"diffCompute1");
 	return sum;
+}
+
+template<class T>
+T stringToNum(const string &str)
+{
+	istringstream iss(str);
+	T num;
+	iss>>num;
+	return num;
 }
 
 #endif // !COMMON_FUNC__H__

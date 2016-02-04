@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <stdio.h>
+#include <string>
 
 #include "testLinkList.h"
 
@@ -196,6 +197,10 @@ void testLinkListMain()
 
 	listTraverse_RL(RL,vi_print);
 	listTraverse_RL(RLb,vi_print);
+
+	cout<<"\n===============POLYN TEST!!!===============================\n";
+	polynomial P;
+	createPolyn(P,"polyn.txt");
 }
 
 

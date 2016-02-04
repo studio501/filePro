@@ -1047,3 +1047,147 @@ void listMerge_RL(RLinkList &La,RLinkList &Lb,RLinkList &Lc,compare_func cFunc)
 	Lb.head=Lb.tail=NULL;
 	Lb.len=0;
 }
+
+//====================================一元多项式应用====================================
+
+int compare_term_status(term a,term b) //<:-1 =:0 >1
+{
+	if(a.expn==b.expn) return 0;
+	else return (a.expn - b.expn)/abs(a.expn -b.expn);
+}
+
+//分配由p指向的值为e的结点
+void makeNode_RLP(LPLink &p,PoElemType e)
+{
+	p=(LPLink)malloc(sizeof(LPNode));
+	if(!p) exit(0);
+	p->data = e;
+}
+
+//释放p所指的结点
+void freeNode_RLP(LPLink &p)
+{
+	free(p);
+	p=NULL;
+}
+
+//h指向L的一个结点,把h当做头结点,将s所指结点插入在第一个结点之前
+void insertFirst_RLP(LPRLinkList &L,LPLink h,LPLink s)
+{
+	s->next=h->next;
+	h->next =s;
+	if(h==L.tail) L.tail=h->next;
+	++L.len;
+}
+
+//h指向L的一个结点,把h当做头结点,删除链表中的第一个结点并以q返回
+bool deleteFirst_RLP(LPRLinkList &L,LPLink h,LPLink &q)
+{
+	q=h->next;
+	if(q)
+	{
+		h->next = q->next;
+		if(!h->next) L.tail=h;
+		--L.len;
+		return true;
+	}
+	else return false;
+}
+
+//返回第一个与e满足判定函数的结点位置
+bool locateElemPos_RLP(LPRLinkList L,PoElemType e,LPPosition &q,compare_term_func cFunc)
+{
+	LPLink p=L.head,pp;
+	do 
+	{
+		pp=p;
+		p=p->next;
+	} while (p&& cFunc(p->data,e)<0 );
+
+	if(!p||cFunc(p->data,e)>0)
+	{
+		q=pp;
+		return false;
+	}
+	else
+	{
+		q=p;
+		return true;
+	}
+}
+//将e 放置到表中合适的位置
+void orderInsertMerge(LPRLinkList &L,PoElemType e,compare_term_func cFunc)
+{
+	LPPosition q,s;
+	if(locateElemPos_RLP(L,e,q,cFunc))//L中存在该项
+	{
+		q->data.coef+=e.coef;//改变当前结点系数
+		if(!q->data.coef) //系数为0,删除当前结点
+		{
+			s=priorPos_RLP(L,q);
+			if(!s) s=L.head;
+			deleteFirst_RLP(L,s,q);
+			freeNode_RLP(q);
+		}
+	}
+	else//生成该指数项并插入链表
+	{
+		makeNode_RLP(s,e);
+		insertFirst_RLP(L,q,s);
+	}
+}
+
+//返回p指向的前驱位置
+LPPosition priorPos_RLP(LPRLinkList &L,LPLink p)
+{
+	LPLink q;
+	q=L.head->next;
+	if(q==p) return NULL;
+	else
+	{
+		while(q->next!=p) q=q->next;
+		return q;
+	}
+}
+
+//输入多项式所在文件和行号,建立表示一元多项的有序链表p
+void createPolyn(polynomial &P,const char *fileName,int mLine)
+{
+	using namespace std;
+	int curLine=0;
+	ifstream fin(fileName);
+	char buffer[1024];
+	term e;
+	if(fin.is_open())
+	{
+		while(curLine <mLine)
+		{
+			fin.getline(buffer,sizeof(buffer));
+			++curLine;
+		}
+		string str;
+		int modeFlag = 0;
+		int curChar = 0;
+		while(buffer[curChar]!='\0')
+		{
+			if (buffer[curChar]==' ')
+			{
+				if(modeFlag%2 == 0)
+				{
+					
+				}
+				else
+				{
+
+				}
+				str.clear();
+				++modeFlag;
+			}
+			else
+			{
+				str+=buffer[curChar];
+			}
+			++curChar;
+		}
+	}
+}
