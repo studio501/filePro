@@ -328,4 +328,13 @@ void addPolyn(polynomial &Pa,polynomial &Pb);
 
 //另一种两人个多项式相加的方法
 void addPolyn1(polynomial &Pa,polynomial &Pb);
+
+//系数取反
+void opposite(polynomial &Pa);
+
+//多项式相减
+void subtractPolyn(polynomial &Pa,polynomial &Pb);
+
+//两个多项式相乘
+void mulitplyPolyn(polynomial &Pa,polynomial &Pb);
 #endif

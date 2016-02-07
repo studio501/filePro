@@ -1235,8 +1235,9 @@ void createPolyn(polynomial &P,const char *fileName,int mLine)
 		string str;
 		int modeFlag = 0;
 		int curChar = 0;
+		bool isEnd = false;
 		while(buffer[curChar]!='\0')
-		{
+		{	
 			if (buffer[curChar]==' ')
 			{
 				if(modeFlag%2 == 0)
@@ -1259,7 +1260,13 @@ void createPolyn(polynomial &P,const char *fileName,int mLine)
 			{
 				str+=buffer[curChar];
 			}
+			
 			++curChar;
+
+			/*if (buffer[curChar+1]=='\0' && !isEnd)
+			{
+
+			}*/
 		}
 	}
 }
@@ -1343,4 +1350,51 @@ void addPolyn1(polynomial &Pa,polynomial &Pb)
 		qb=qb->next;
 	}
 	destroyList_RLP(Pb);
+}
+
+//系数取反
+void opposite(polynomial &Pa)
+{
+	LPPosition p=Pa.head;
+	while(p->next)
+	{
+		p=p->next;
+		p->data.coef*=-1;
+	}
+}
+
+//多项式相减
+void subtractPolyn(polynomial &Pa,polynomial &Pb)
+{
+	opposite(Pb);
+	addPolyn1(Pa,Pb);
+}
+
+//两个多项式相乘
+void mulitplyPolyn(polynomial &Pa,polynomial &Pb)
+{
+	polynomial Pc;
+	LPPosition qa,qb;
+	term a,b,c;
+	initList_RLP(Pc);
+	qa=Pa.head->next;
+	while(qa)
+	{
+		a=qa->data;
+		qb=Pb.head->next;
+		while(qb)
+		{
+			b=qb->data;
+			c.coef = a.coef*b.coef;
+			c.expn = a.expn + b.expn;
+			orderInsertMerge(Pc,c,compare_term_status);
+			qb=qb->next;
+		}
+		qa=qa->next;
+	}
+	destroyList_RLP(Pb);
+	clearList_RLP(Pa);
+	Pa.head=Pc.head;
+	Pa.tail=Pc.tail;
+	Pa.len=Pc.len;
 }

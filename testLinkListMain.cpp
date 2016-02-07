@@ -215,7 +215,28 @@ void testLinkListMain()
 	addPolyn1(P,P2);
 	printPolyn(P);
 
+	opposite(P);
+	printPolyn(P);
 
+	polynomial P3;
+	createPolyn(P3,"polyn.txt",2);
+
+	polynomial P4;
+	createPolyn(P4,"polyn.txt",3);
+	subtractPolyn(P3,P4);
+	printPolyn(P3);
+
+	polynomial P5;
+	polynomial P6;
+	createPolyn(P5,"polyn.txt",2);
+	createPolyn(P6,"polyn.txt",3);
+	cout<<"P5:\n";
+	printPolyn(P5);
+
+	cout<<"P6:\n";
+	printPolyn(P6);
+	mulitplyPolyn(P5,P6);
+	printPolyn(P5);
 }
 
 
