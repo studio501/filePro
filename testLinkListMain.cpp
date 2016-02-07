@@ -201,6 +201,21 @@ void testLinkListMain()
 	cout<<"\n===============POLYN TEST!!!===============================\n";
 	polynomial P;
 	createPolyn(P,"polyn.txt");
+	printPolyn(P);
+
+	polynomial P1;
+	createPolyn(P1,"polyn.txt",2);
+	printPolyn(P1);
+	addPolyn(P,P1);
+
+	printPolyn(P);
+
+	polynomial P2;
+	createPolyn(P2,"polyn.txt",3);
+	addPolyn1(P,P2);
+	printPolyn(P);
+
+
 }
 
 

@@ -271,13 +271,13 @@ struct LPNode
 };
 typedef LPNode * LPLinkList;
 typedef LPNode *LPLink,*LPPosition;
-typedef LPLinkList polynomial;
+
 struct LPRLinkList
 {
 	LPLink head,tail;//分别指向头,尾结点
 	int len;//表中元素个数
 };
-
+typedef LPRLinkList polynomial;
 typedef int (*compare_term_func)(term,term);
 int compare_term_status(term a,term b); //<:-1 =:0 >1
 
@@ -286,6 +286,21 @@ void makeNode_RLP(LPLink &p,PoElemType e);
 
 //释放p所指的结点
 void freeNode_RLP(LPLink &p);
+
+//创建一个空表
+void initList_RLP(LPLink &p);
+
+//将表L重置为空
+void clearList_RLP(polynomial &L);
+
+//判断一个表是否为空表
+bool isEmpty_RLP(polynomial p);
+
+//销毁线性表L
+void destroyList_RLP(polynomial &L);
+
+//用pb 扩展pa
+void appenList_RLP(polynomial Pa,LPLink p);
 
 //h指向L的一个结点,把h当做头结点,将s所指结点插入在第一个结点之前
 void insertFirst_RLP(LPRLinkList &L,LPLink h,LPLink s);
@@ -304,4 +319,13 @@ void orderInsertMerge(LPRLinkList &L,PoElemType e,compare_term_func cFunc);
 
 //输入多项式所在文件和行号,建立表示一元多项的有序链表p
 void createPolyn(polynomial &P,const char *fileName,int mLine =1);
+
+//打印多项式
+void printPolyn(polynomial P);
+
+//两个多项相加
+void addPolyn(polynomial &Pa,polynomial &Pb);
+
+//另一种两人个多项式相加的方法
+void addPolyn1(polynomial &Pa,polynomial &Pb);
 #endif

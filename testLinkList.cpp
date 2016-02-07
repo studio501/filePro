@@ -1080,6 +1080,71 @@ void insertFirst_RLP(LPRLinkList &L,LPLink h,LPLink s)
 	++L.len;
 }
 
+//
+void initList_RLP(LPRLinkList &L)
+{
+	LPLink p;
+	p=(LPLink)malloc(sizeof(LPNode));
+	if(p)
+	{
+		p->next=NULL;
+		L.head=L.tail=p;
+		L.len=0;
+	}
+	else
+		exit(0);
+}
+
+//判断一个表是否为空表
+bool isEmpty_RLP(polynomial p)
+{
+	if(p.len) return false;
+	else return true;
+}
+
+//将表L重置为空
+void clearList_RLP(polynomial &L)
+{
+	LPLink p,q;
+	if(L.head!=L.tail)
+	{
+		p=q=L.head->next;
+		L.head->next=NULL;
+		while(p!=L.tail)
+		{
+			p=q->next;
+			free(q);
+			q=p;
+		}
+		free(q);
+		L.tail=L.head;
+		L.len=0;
+	}
+}
+
+//销毁线性表L
+void destroyList_RLP(polynomial &L)
+{
+	clearList_RLP(L);
+	freeNode_RLP(L.head);
+	L.tail=NULL;
+	L.len=0;
+}
+
+//用pb 扩展pa
+void appenList_RLP(polynomial L,LPLink s)
+{
+	int i=1;
+	L.tail->next=s;
+	while(s->next)
+	{
+		s=s->next;
+		++i;
+	}
+	L.tail=s;
+	L.len+=i;
+}
+
 //h指向L的一个结点,把h当做头结点,删除链表中的第一个结点并以q返回
 bool deleteFirst_RLP(LPRLinkList &L,LPLink h,LPLink &q)
 {
@@ -1158,6 +1223,8 @@ void createPolyn(polynomial &P,const char *fileName,int mLine)
 	ifstream fin(fileName);
 	char buffer[1024];
 	term e;
+	LPPosition q,s;
+	initList_RLP(P);
 	if(fin.is_open())
 	{
 		while(curLine <mLine)
@@ -1174,11 +1241,16 @@ void createPolyn(polynomial &P,const char *fileName,int mLine)
 			{
 				if(modeFlag%2 == 0)
 				{
-					
+					e.coef = stringToNum<float>(str);
 				}
 				else
 				{
-
+					e.expn = stringToNum<int>(str);
+					if(!locateElemPos_RLP(P,e,q,compare_term_status))
+					{
+						makeNode_RLP(s,e);
+						insertFirst_RLP(P,q,s);
+					}
 				}
 				str.clear();
 				++modeFlag;
@@ -1190,4 +1262,85 @@ void createPolyn(polynomial &P,const char *fileName,int mLine)
 			++curChar;
 		}
 	}
+}
+
+//打印多项式
+void printPolyn(polynomial P)
+{
+	printf("start print polynomial\n");
+	LPLink q;
+	q=P.head->next;
+	while(q)
+	{
+		printf("%.2f    %d\n",q->data.coef,q->data.expn);
+		q=q->next;
+	}
+}
+
+//两个多项相加
+void addPolyn(polynomial &Pa,polynomial &Pb)
+{
+	LPPosition ha=Pa.head,hb=Pb.head,qa,qb;
+	term a,b;
+	qa=ha->next;
+	qb=hb->next;
+	while(!isEmpty_RLP(Pa)&&!isEmpty_RLP(Pb)&&qa)
+	{
+		a=qa->data;
+		b=qb->data;
+
+		int caseStatus = compare_term_status(a,b);
+		switch(caseStatus)
+		{
+		case -1:
+			ha=qa;
+			qa=ha->next;
+			break;
+		case 0:
+			qa->data.coef+=qb->data.coef;
+			if(qa->data.coef==0)
+			{
+				deleteFirst_RLP(Pa,ha,qa);
+				freeNode_RLP(qa);
+			}
+			else
+			{
+				ha = qa;
+			}
+			deleteFirst_RLP(Pb,hb,qb);
+			freeNode_RLP(qb);
+			qb=hb->next;
+			qa=ha->next;
+			break;
+		case 1:
+			deleteFirst_RLP(Pb,hb,qb);
+			insertFirst_RLP(Pa,ha,qb);
+			ha=ha->next;
+			qb=hb->next;
+			break;
+
+		}
+	}
+	if(!isEmpty_RLP(Pb))
+	{
+		Pb.tail=hb;
+		appenList_RLP(Pa,qb);
+	}
+	destroyList_RLP(Pb);
+
+}
+
+//另一种两人个多项式相加的方法
+void addPolyn1(polynomial &Pa,polynomial &Pb)
+{
+	LPPosition qb;
+	term b;
+	qb=Pb.head->next;
+	while(qb)
+	{
+		b=qb->data;
+		orderInsertMerge(Pa,b,compare_term_status);
+		qb=qb->next;
+	}
+	destroyList_RLP(Pb);
 }

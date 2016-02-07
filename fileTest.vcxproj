@@ -86,6 +86,7 @@
     <ClInclude Include="testList.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="commonFunc.cpp" />
     <ClCompile Include="fileTest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">

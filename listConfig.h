@@ -1,6 +1,8 @@
 
 #ifndef __LIST_CONFIG__HHHH__
 #define __LIST_CONFIG__HHHH__
+
+#include "commonFunc.h"
 typedef int ElemType;
 
 
