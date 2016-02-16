@@ -84,6 +84,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testLinkList.h" />
     <ClInclude Include="testList.h" />
+    <ClInclude Include="testStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="commonFunc.cpp" />
@@ -96,6 +97,8 @@
     <ClCompile Include="testLinkListMain.cpp" />
     <ClCompile Include="testList.cpp" />
     <ClCompile Include="testListMain.cpp" />
+    <ClCompile Include="testStack.cpp" />
+    <ClCompile Include="testStackMain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

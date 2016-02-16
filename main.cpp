@@ -13,14 +13,14 @@
 using namespace std;
 //int fileFunc(int m = 2);
 //void testListMain();
-void testLinkListMain();
-
+//void testLinkListMain();
+void testStackMain();
 int _tmain(int argc, _TCHAR* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
 	cout<<diffCompute2()<<endl;*/
-	
-	testLinkListMain();
+	//testLinkListMain();
+	testStackMain();
 	system("pause");
 	return 0;
 }
