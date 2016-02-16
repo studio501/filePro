@@ -1,3 +1,7 @@
 
 while(*s)
 putchar(*s++);
+while(*s)
+putchar(*s++);
+while(*s)
+putchar(*s++);

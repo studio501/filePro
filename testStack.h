@@ -3,19 +3,19 @@
 
 #define STACK_INIT_SIZE  80
 #define STACK_INC_SIZE  20
-//typedef int SElemType ;  //for common test
+typedef int SElemType ;  //for common test
 
 struct PosType
 {
 	int x;//行值
 	int y;//列值
 };
-struct SElemType
-{
-	int ord;//通道块在路径上的序列号
-	int di;//向下一个通道块走的方向 0~3:东南西北
-	PosType seat;//通道块在迷宫中的位置
-};
+//struct SElemType
+//{
+//	int ord;//通道块在路径上的序列号
+//	int di;//向下一个通道块走的方向 0~3:东南西北
+//	PosType seat;//通道块在迷宫中的位置
+//};
 
 
 struct SqStack
@@ -77,14 +77,14 @@ void check_bracket(const char *fileName="bracket.txt",int line=1);
 //行编辑程序
 void lineEdit(const char *fileName="inputline.txt");
 
-#define MAXLENGTH 25
-typedef int MazeType[MAXLENGTH][MAXLENGTH];
-MazeType g_m;
-int g_x,g_y;
-PosType g_begin,g_end;//迷宫的入口坐标 出口坐标
-
-//输出迷宫的解
-void print_m();
+//#define MAXLENGTH 25
+//typedef int MazeType[MAXLENGTH][MAXLENGTH];
+//MazeType g_m;
+//int g_x,g_y;
+//PosType g_begin,g_end;//迷宫的入口坐标 出口坐标
+//
+////输出迷宫的解
+//void print_m();
 
 
 
