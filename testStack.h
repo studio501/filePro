@@ -5,11 +5,11 @@
 #define STACK_INC_SIZE  20
 typedef int SElemType ;  //for common test
 
-struct PosType
-{
-	int x;//行值
-	int y;//列值
-};
+//struct PosType
+//{
+//	int x;//行值
+//	int y;//列值
+//};
 //struct SElemType
 //{
 //	int ord;//通道块在路径上的序列号
