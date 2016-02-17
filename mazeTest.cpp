@@ -158,6 +158,54 @@ bool mazePath(PosType start_,PosType end_)
 	return false;
 }
 
+//判断t1,t2的优先关系
+char precede_evalue(char t1,char t2)
+{
+	char f;
+	switch (t2)
+	{
+	case '+':
+	case '-':
+		if(t1=='('||t1=='\n')
+			f='<';
+		else
+			f='>';
+		break;
+	case '*':
+	case '/':
+		if(t1=='*'||t1=='/'||t1==')')
+			f='>';
+		else
+			f='<';
+		break;
+	case '(':
+		if(t1==')')
+		{
+			printf("bracket is not match!\n");
+			system("pause");
+		}
+		else
+			f='<';
+		break;
+	case ')':
+		switch(t1)
+		{
+		case '(':
+			f='=';
+			break;
+		case '\n':
+			printf("short of right bracket\n");
+			system("pause");
+			break;
+		default:
+			f='>';
+			break;
+		}
+	default:
+		break;
+	}
+}
+
 void mazeTest()
 {
 	cout<<"mazeTest\n";
