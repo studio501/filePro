@@ -201,9 +201,24 @@ char precede_evalue(char t1,char t2)
 			f='>';
 			break;
 		}
+	case '\n':
+		switch(t1)
+		{
+		case '\n':
+			f='=';
+			break;
+		case '(':
+			printf("short of right bracket\n");
+			system("pause");
+			break;
+		default:
+			f='>';
+			break;
+		}
 	default:
 		break;
 	}
+	return f;
 }
 
 void mazeTest()

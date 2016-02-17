@@ -46,6 +46,9 @@ void markPrint(PosType b);
 //若存在start 到出口end的通道 求得一条 返回true
 bool mazePath(PosType start_,PosType end_);
 
+//判断t1,t2的优先关系
+char precede_evalue(char t1,char t2);
+
 //maze测试主入口
 void mazeTest();
 #endif
