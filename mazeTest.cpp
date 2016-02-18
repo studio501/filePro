@@ -201,6 +201,7 @@ char precede_evalue(char t1,char t2)
 			f='>';
 			break;
 		}
+		break;
 	case '\n':
 		switch(t1)
 		{
@@ -215,10 +216,146 @@ char precede_evalue(char t1,char t2)
 			f='>';
 			break;
 		}
+		break;
 	default:
 		break;
 	}
 	return f;
+}
+
+//判断c是否是7种运算之一
+bool is7operate(char c)
+{
+	switch (c)
+	{
+	case '+':
+	case '-':
+	case '*':
+	case '/':
+	case '(':
+	case ')':
+	case '\n':
+		return true;
+	default:
+		return false;
+	}
+}
+
+//做四则运算
+float doOperate(float a,char theta,float b)
+{
+	switch (theta)
+	{
+	case '+':return a+b;
+	case '-':return a-b;
+	case '*':return a*b;
+	default:
+		return a/b;
+	}
+}
+
+//算术表达式求值
+float evaluateExpression(int mLine,const char *file)
+{
+	int curLine=0;
+	char buffer[256];
+
+	ifstream fin(file);
+	if(fin.is_open())
+	{
+		while(curLine <mLine)
+		{
+			fin.getline(buffer,sizeof(buffer));
+			++curLine;
+		}
+		int charIndex=0;
+		stack<char> OPTR;
+		stack<float> OPND;
+		OPTR.push('\n');
+		char x = OPTR.top();
+		char c;
+		float a,b,d;
+		int i;
+		char z[11];
+		float result;
+		while(buffer[charIndex++]!='\0');
+		buffer[charIndex-1]='\n';
+		buffer[charIndex]='\0';
+
+		charIndex=0;
+		while(buffer[charIndex]!='\0')
+		{
+			c=buffer[charIndex];
+			if(is7operate(c))
+			{
+				switch (precede_evalue(x,c))
+				{
+				case '<':
+					OPTR.push(c);
+					++charIndex;
+					break;
+				case '=':
+					x=OPTR.top();
+					OPTR.pop();
+					++charIndex;
+					break;
+				case '>':
+					x=OPTR.top();
+					OPTR.pop();
+					b=OPND.top();
+					OPND.pop();
+					a=OPND.top();
+					OPND.pop();
+					OPND.push(doOperate(a,x,b));
+				}
+			}
+			else if(c>='0'&&c<='9')
+			{
+				i=0;
+				while(buffer[charIndex]>='0'&&buffer[charIndex]<='9')
+				{
+					z[i++]=buffer[charIndex];
+					++charIndex;
+				}
+				z[i]='\0';
+				d=atoi(z);
+				OPND.push(d);
+			}
+			else
+			{
+				printf("invalid letter\n");
+				system("pause");
+			}
+			if (!OPTR.empty())
+				x=OPTR.top();
+		}
+		result=OPND.top();
+		OPND.pop();
+		if(!OPND.empty())
+		{
+			printf("incorrect expression\n");
+			system("pause");
+		}
+		return result;
+	}
+}
+
+//move x-->z
+void moveHanoi(char x,int n,char z,int &gc)
+{
+	printf("step %i : move %i planet from %c to %c\n",++gc,n,x,z);
+}
+
+//将塔座x上按直径由小到大且自上而下编号为1到n的n个圆盘按规则搬到塔座z上 y 用作辅助塔
+void hanoi(char x,char y,char z,int &gc,int n)
+{
+	if(n==1) moveHanoi(x,1,z,gc);
+	else
+	{
+		hanoi(x,z,y,gc,n-1);
+		moveHanoi(x,n,z,gc);
+		hanoi(y,x,z,gc,n-1);
+	}
 }
 
 void mazeTest()
@@ -232,5 +369,9 @@ void mazeTest()
 		print_m();
 	}
 	else cout<<"no way out\n";
+	printf("%f\n",evaluateExpression(3));
+
+	int gc=0;
+	hanoi('a','b','c',gc,4);
 }
 

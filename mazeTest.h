@@ -49,6 +49,20 @@ bool mazePath(PosType start_,PosType end_);
 //判断t1,t2的优先关系
 char precede_evalue(char t1,char t2);
 
+//判断c是否是7种运算之一
+bool is7operate(char c);
+
+//做四则运算
+float doOperate(float a,char theta,float b);
+
+//算术表达式求值
+float evaluateExpression(int mLine=1,const char *file="evaluateExpression.txt");
+
+//move x-->z
+void moveHanoi(char x,int n,char z,int &gc);
+
+//将塔座x上按直径由小到大且自上而下编号为1到n的n个圆盘按规则搬到塔座z上 y 用作辅助塔
+void hanoi(char x,char y,char z,int &gc,int n=3);
 //maze测试主入口
 void mazeTest();
 #endif
