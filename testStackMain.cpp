@@ -48,10 +48,6 @@ void testStackMain()
 	lineEdit();
 }
 
-void testMaze()
-{
-
-}
 
 
 

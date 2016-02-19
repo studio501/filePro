@@ -80,6 +80,7 @@
     <ClInclude Include="DSList.h" />
     <ClInclude Include="DSList.hpp" />
     <ClInclude Include="listConfig.h" />
+    <ClInclude Include="lQueueTest.h" />
     <ClInclude Include="mazeTest.h" />
     <ClInclude Include="queueTest.h" />
     <ClInclude Include="stdafx.h" />
@@ -91,9 +92,11 @@
   <ItemGroup>
     <ClCompile Include="commonFunc.cpp" />
     <ClCompile Include="fileTest.cpp" />
+    <ClCompile Include="lQueueTestMain.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mazeTest.cpp" />
     <ClCompile Include="queueTest.cpp" />
+    <ClCompile Include="queueTestMain.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>

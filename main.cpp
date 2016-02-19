@@ -15,8 +15,9 @@ using namespace std;
 //void testListMain();
 //void testLinkListMain();
 //void testStackMain();
-void mazeTest();
-
+//void mazeTest();
+void queueTestMain();
+void lQueueTestMain();
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -24,7 +25,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	cout<<diffCompute2()<<endl;*/
 	//testLinkListMain();
 	//testStackMain();
-	mazeTest();
+	//mazeTest();
+	queueTestMain();
+	lQueueTestMain();
 	system("pause");
 	return 0;
 }
