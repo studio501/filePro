@@ -15,6 +15,7 @@ struct QNode
 	QNode *next;
 };
 
+
 template<class T>
 struct LinkQueue
 {
