@@ -24,4 +24,7 @@ void sstringTestMain()
 
 	cout<<strInsert(s2,strLength(s2)/2,t);
 	strPrint(s2);
+
+	replaceStr(s2,t,s1);
+	strPrint(s2);
 }

@@ -20,6 +20,8 @@ void queueTestMain();
 void lQueueTestMain();
 
 void sstringTestMain();
+void hstringTestMain();
+void lstringTestMain();
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -28,9 +30,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	//testLinkListMain();
 	//testStackMain();
 	//mazeTest();
-	queueTestMain();
+	/*queueTestMain();
 	lQueueTestMain();
 	sstringTestMain();
+	hstringTestMain();*/
+	lstringTestMain();
 	system("pause");
 	return 0;
 }
