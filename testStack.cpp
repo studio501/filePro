@@ -9,6 +9,7 @@
 
 
 using namespace std;
+
 //打印一个元素
 void print_stack(SElemType e)
 {

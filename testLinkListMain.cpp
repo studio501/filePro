@@ -10,6 +10,7 @@
 
 using namespace std;
 
+
 const char * listfile = "list.txt";
 
 void vi_print(ElemType &a);

@@ -2,6 +2,8 @@
 #define __TEST_LIST__HH_
 
 #include "listConfig.h"
+
+
 const int LIST_INIT_SIZE = 10;
 const int LIST_INCREMENT = 8;
 
@@ -65,4 +67,6 @@ void listMerge(SqList &La,SqList &Lb,SqList &Lc);
 
 //la,lb 有序 归并为lc后仍有序
 void listMerge1(SqList &La,SqList &Lb,SqList &Lc);
+
+
 #endif

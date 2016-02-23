@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 void vi_print(ElemType &a)
 {
 	cout<<a<<" ";

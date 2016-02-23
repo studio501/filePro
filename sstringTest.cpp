@@ -28,3 +28,27 @@ void sstringTestMain()
 	replaceStr(s2,t,s1);
 	strPrint(s2);
 }
+
+void testKMP()
+{
+	int i,*p;
+	SString s1,s2;
+	strAssign(s1,"aaabaaaab");
+	strAssign(s2,"aaaab");
+	p=(int*)malloc((strLength(s2)+1)*sizeof(int));
+	get_next(s2,p);
+	cout<<"next [] is :\n";
+	for(i=1;i<=strLength(s2);++i)
+		cout<<*(p+i)<<" ";
+	cout<<endl;
+	i=index_KMP(s1,s2,1,p);
+	if(i) cout<<"match succeed in pos "<<i<<endl;
+	else cout<<"match failed\n";
+
+	get_nextval(s2,p);
+	cout<<"nextval [] is :\n";
+	for(i=1;i<=strLength(s2);++i)
+		cout<<*(p+i)<<" ";
+	cout<<endl;
+	cout<<"match succeed with nextval in pos "<<index_KMP(s1,s2,1,p)<<endl;
+}

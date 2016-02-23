@@ -23,6 +23,10 @@ void sstringTestMain();
 void hstringTestMain();
 void lstringTestMain();
 
+void testKMP();
+
+void apply_string();
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
@@ -34,7 +38,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	lQueueTestMain();
 	sstringTestMain();
 	hstringTestMain();*/
-	lstringTestMain();
+	//lstringTestMain();
+
+	//testKMP();
+	apply_string();
 	system("pause");
 	return 0;
 }

@@ -6,6 +6,10 @@
 #include <math.h>
 #include "testList.h"
 
+
+
+
+
 bool compare_equal(ElemType a,ElemType b)
 {
 	return a == b;
