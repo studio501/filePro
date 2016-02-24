@@ -8,6 +8,8 @@
 #include <fstream>
 using namespace std;
 
+#include "testLinkList.h"
+using namespace LL;
 namespace HS{
 
 struct HString
@@ -433,7 +435,7 @@ void Save()
 		cout<<"save failed.\n";
 }
 
-#include "testLinkList.h"
+
 
 typedef int ElemType;
 #define MaxKeyNum 25
@@ -449,7 +451,7 @@ struct WordListType //一个书目的词表(顺序表)和非索引词表(有序表)共用类型
 struct IdxTermType //索引类型
 {
 	HString key;//关键词
-	LinkList bnolist;//存放书号索引的链表
+	RLinkList bnolist;//存放书号索引的链表
 };
 
 struct IdxListType
@@ -461,13 +463,144 @@ struct IdxListType
 //一些全局变量
 char buf[MaxLineLen+1];
 WordListType wdlist,noidx;
+const char *idxFile="NoIdx.txt";
+const char *bookIdxFile="BookIdx.txt";
+const char *bookInfoFile="BookInfo.txt";
 
 //置索引表idxlist为空表,且在idxlist.item[0] 设一空串
 void initIdxList(IdxListType &idxlist)
 {
 	idxlist.last=0;
 	initString(idxlist.item[0].key);
-	//initList(idxlist.item[0].bnolist);
+	initList_RL(idxlist.item[0].bnolist);
+}
+
+//从buf中提取书名关键字到wdlist,书号存入BookNo
+void ExtractKeyWord(int &BookNo)
+{
+	int i,l,f=1;
+	char *s1,*s2;
+	for(i=1;i<=wdlist.last;++i)
+	{
+		free(wdlist.item[i]);
+		wdlist.item[i]=NULL;
+	}
+	wdlist.last=0;
+	BookNo=atoi(buf);
+	s1=&buf[4];
+	while(f)
+	{
+		s2=strchr(s1,' ');
+		if(!s2)
+		{
+			s2=strchr(s1,'\0');
+			f=0;
+		}
+		l=s2-s1;
+		if(s1[0]>='A' &&s1[0]<='Z')
+		{
+			wdlist.item[wdlist.last]=(char *)malloc((l+1)*sizeof(char));
+			for(i=0;i<l;++i)
+				wdlist.item[wdlist.last][i]=s1[i];
+			wdlist.item[wdlist.last][l]='\0';
+			for(i=0;i<noidx.last&&(l=strcmp(wdlist.item[wdlist.last],noidx.item[i]))>0;++i);
+			if(!l)
+			{
+				free(wdlist.item[wdlist.last]);
+				wdlist.item[wdlist.last]=NULL;
+			}
+			else
+				++wdlist.last;
+		}
+		s1=s2+1;
+	}
+}
+
+//用wd返回词表wdlist中第i个关键词
+void GetWord(int i,HString &wd)
+{
+	strAssign(wd,wdlist.item[i]);
+}
+
+//在索引表idxlist中查询是否存在与wd相等的关键词,若存在 返回其在索引表中的位置
+int Locate(IdxListType &idxlist,HString wd,bool &b)
+{
+	int i,m;
+	for(i=idxlist.last;(m=strCompare(idxlist.item[i].key,wd))>0;--i)
+		if(m==0)
+		{
+			b=true;
+			return i;
+		}
+		else
+		{
+			b=false;
+			return i+1;
+		}
+}
+
+//在索引表idxlist的第i项上插入关键词wd,并初始化书号索引的链表为空表
+void InsertNewKey(IdxListType &idxlist,int i,HString wd)
+{
+	int j;
+	for(j=idxlist.last;j>=i;--j)
+		idxlist.item[j+1]=idxlist.item[j];
+	initString(idxlist.item[i].key);
+	strCopy(idxlist.item[i].key,wd);
+	initList_RL(idxlist.item[i].bnolist);
+	++idxlist.last;
+}
+
+//在索引表idxlist的第i项中插入书号bno的索引
+void InsertBook(IdxListType &idxlist,int i,int bno)
+{
+	Link p;
+	makeNode(p,bno);
+	p->next=NULL;
+	appenList(idxlist.item[i].bnolist,p);
+}
+
+//将书号为bno的关键词插入索引表
+void InsIdxList(IdxListType &idxlist,int bno)
+{
+	int i,j;
+	bool b;
+	HString wd;
+	initString(wd);
+	for(i=0;i<wdlist.last;++i)
+	{
+		GetWord(i,wd);
+		j=Locate(idxlist,wd,b);
+		if(!b) InsertNewKey(idxlist,j,wd);
+		InsertBook(idxlist,j,bno);
+	}
+}
+
+//将生成的索引表idxlist输出到文件
+void PutText(IdxListType idxlist)
+{
+	int i,j;
+	Link p;
+	ofstream fout(bookIdxFile,ios_base::out);
+	if(fout.is_open())
+	{
+		fout<<idxlist.last<<endl;
+		for(i=1;i<=idxlist.last;++i)
+		{
+			for(j=0;j<idxlist.item[i].key.length;++j)
+			{
+				fout<<idxlist.item[i].key.ch[j];
+			}
+			fout<<endl<<idxlist.item[i].bnolist.len<<endl;
+			p=idxlist.item[i].bnolist.head;
+			for(j=1;j<=idxlist.item[i].bnolist.len;++j)
+			{
+				p=p->next;
+				fout<<p->data<<" ";
+			}
+			fout<<endl;
+		}
+	}
 }
 
 };

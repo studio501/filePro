@@ -10,9 +10,12 @@
 
 #include "commonFunc.h"
 
+#include "testLinkList.h"
+
 using namespace std;
 //int fileFunc(int m = 2);
 //void testListMain();
+
 //void testLinkListMain();
 //void testStackMain();
 //void mazeTest();
@@ -27,11 +30,13 @@ void testKMP();
 
 void apply_string();
 
+void BnoTestMain();
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
 	cout<<diffCompute2()<<endl;*/
-	//testLinkListMain();
+	//LL::testLinkListMain();
 	//testStackMain();
 	//mazeTest();
 	/*queueTestMain();
@@ -41,7 +46,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	//lstringTestMain();
 
 	//testKMP();
-	apply_string();
+	//apply_string();
+
+	BnoTestMain();
 	system("pause");
 	return 0;
 }

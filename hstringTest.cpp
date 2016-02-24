@@ -1,10 +1,10 @@
 
 #include "stdafx.h"
 #include "hstringTest.h"
-
+using namespace HS;
 void hstringTestMain()
 {
-	using namespace HS;
+	
 
 	int i;
 	char c,*p="Good bye!",*q="Good luck!";
@@ -31,7 +31,7 @@ void hstringTestMain()
 
 void apply_string()
 {
-	using namespace HS;
+	
 	bool s=true;
 	int i,k;
 	for(i=0;i<MAX_FILE_ROW_LEN;++i)
@@ -81,5 +81,43 @@ void apply_string()
 			s=false;
 			break;
 		}
+	}
+}
+
+//书目测试主函数
+void BnoTestMain()
+{
+	IdxListType idxlist;
+	int BookNo;
+	int k;
+	ifstream fin(idxFile,ios_base::in);
+	if (fin.is_open())
+	{
+		fin>>noidx.last;
+		for(k=0;k<noidx.last;++k)
+		{
+			fin>>buf;
+			noidx.item[k]=(char *)malloc((strlen(buf)+1)*sizeof(char));
+			strcpy(noidx.item[k],buf);
+		}
+		fin.close();
+	}
+
+	fin.open(bookInfoFile,ios_base::in);
+	if(fin.is_open())
+	{
+		initIdxList(idxlist);
+		while(fin.getline(buf,MaxLineLen))
+		{
+			ExtractKeyWord(BookNo);
+			InsIdxList(idxlist,BookNo);
+		}
+		fin.close();
+	}
+	ofstream fout(bookIdxFile,ios_base::out);
+	if(fout.is_open())
+	{
+		PutText(idxlist);
+		fout.close();
 	}
 }
