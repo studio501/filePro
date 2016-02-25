@@ -32,6 +32,8 @@ void apply_string();
 
 void BnoTestMain();
 
+void bookTestMain();
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
@@ -48,7 +50,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	//testKMP();
 	//apply_string();
 
-	BnoTestMain();
+	//BnoTestMain();
+	bookTestMain();
 	system("pause");
 	return 0;
 }

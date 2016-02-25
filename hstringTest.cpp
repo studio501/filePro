@@ -84,7 +84,7 @@ void apply_string()
 	}
 }
 
-//书目测试主函数
+//生成BookIdx.txt文件测试主函数
 void BnoTestMain()
 {
 	IdxListType idxlist;
@@ -121,3 +121,90 @@ void BnoTestMain()
 		fout.close();
 	}
 }
+
+//以关键字检索书目 要测试此程序 需要先运行BnoTestMain 生成BookIdx.txt
+//如果新添书目也要先行BnoTestMain
+void bookTestMain()
+{
+	IdxListType idxlist;//索引表
+	BookListType booklist;//书目表
+	char buf[MaxLineLen+5];//当前书目串
+	HString ch;//索引字符串
+	int BookNo;//书号
+	Link p;
+	int i=0,j=0,k=0,flag=1;
+	initString(ch);
+	ifstream fin(bookIdxFile,ios_base::in);
+	if(fin.is_open())
+	{
+		fin>>idxlist.last;
+		eatlineFromFile(fin);
+		for(k=0;k<idxlist.last;++k)
+		{
+			fin.getline(buf,MaxLineLen);
+			i=0;
+			while(buf[i]) buf[i++]=tolower(buf[i]);
+			initString(idxlist.item[k].key);
+			strAssign(idxlist.item[k].key,buf);
+			initList_RL(idxlist.item[k].bnolist);
+			fin>>i;
+			for(j=0;j<i;++j)
+			{
+				fin>>BookNo;
+				makeNode(p,BookNo);
+				p->next=NULL;
+				appenList(idxlist.item[k].bnolist,p);
+			}
+			eatlineFromFile(fin);
+		}
+		fin.close();
+	}
+
+	fin.open(bookInfoFile,ios_base::in);
+	if(fin.is_open())
+	{
+		i=0;
+		while(fin.getline(buf,MaxLineLen))
+		{
+			booklist.item[i].bookno=atoi(buf);
+			strcpy(booklist.item[i++].bookname,&buf[4]);
+		}
+		booklist.last=i;
+		while(flag)
+		{
+			cout<<"请输入书目的关键词(一个)\n";
+			
+			cin>>buf;
+			
+			i=0;
+			while(buf[i]) buf[i++]=tolower(buf[i]);
+			strAssign(ch,buf);
+			i=0;
+			do 
+			{
+				k=strCompare(ch,idxlist.item[i++].key);
+			} while (k&&i<=idxlist.last);
+			if(!k)
+			{
+				p=idxlist.item[--i].bnolist.head->next;
+				while(p)
+				{
+					j=0;
+					while(j<booklist.last&&p->data!=booklist.item[j].bookno) ++j;
+					if(j<booklist.last)
+						cout<<booklist.item[j].bookno<<"   "<<booklist.item[j].bookname<<endl;
+					p=p->next;
+				}
+			}
+			else
+				cout<<"没有找到\n";
+			cout<<"继续查找请输入1,退出查找请输入0:\n";
+			
+			cin>>flag;
+			cin.clear();
+			eatline();
+		}
+	}
+}
+
+//

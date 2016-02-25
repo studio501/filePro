@@ -197,6 +197,7 @@ char str[MAX_LINE_COL_LEN],filename[FILE_NAME_LEN]="";
 int nLine=0;
 
 inline void eatline(){while(cin.get()!='\n') continue;}
+inline void eatlineFromFile(ifstream &fin){while(fin.get()!='\n') continue;}
 
 //打开文件(新或旧)
 void Open()
@@ -460,6 +461,20 @@ struct IdxListType
 	int last;//关键词的个数
 };
 
+#define MaxBookNum 10
+
+struct BookTermType //书目项类型
+{
+	char bookname[MaxLineLen+1];//书名串
+	int bookno;//书号
+};
+
+struct BookListType//书目表类型
+{
+	BookTermType item[MaxBookNum];
+	int last;//书目数量
+};
+
 //一些全局变量
 char buf[MaxLineLen+1];
 WordListType wdlist,noidx;
@@ -526,17 +541,17 @@ void GetWord(int i,HString &wd)
 int Locate(IdxListType &idxlist,HString wd,bool &b)
 {
 	int i,m;
-	for(i=idxlist.last;(m=strCompare(idxlist.item[i].key,wd))>0;--i)
-		if(m==0)
-		{
-			b=true;
-			return i;
-		}
-		else
-		{
-			b=false;
-			return i+1;
-		}
+	for(i=idxlist.last;(m=strCompare(idxlist.item[i].key,wd))>0;--i);
+	if(m==0)
+	{
+		b=true;
+		return i;
+	}
+	else
+	{
+		b=false;
+		return i+1;
+	}
 }
 
 //在索引表idxlist的第i项上插入关键词wd,并初始化书号索引的链表为空表
@@ -602,6 +617,9 @@ void PutText(IdxListType idxlist)
 		}
 	}
 }
+
+
+
 
 };
 

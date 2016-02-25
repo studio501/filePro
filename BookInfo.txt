@@ -4,3 +4,5 @@
 034 The Design and Analysis of Computer Algorithms
 050 Introduction to Numerical Analysis
 067 Numerical Analysis
+070 C++ Primer
+071 Net Programming 
