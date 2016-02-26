@@ -34,6 +34,14 @@ void BnoTestMain();
 
 void bookTestMain();
 
+void arrayTestMain();
+
+void testSMatrix();
+
+void testRLSMatrix();
+
+void testCLSMatrix();
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
@@ -51,7 +59,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	//apply_string();
 
 	//BnoTestMain();
-	bookTestMain();
+	//bookTestMain();
+
+	//arrayTestMain();
+	//testSMatrix();
+	//testRLSMatrix();
+
+	testCLSMatrix();
 	system("pause");
 	return 0;
 }

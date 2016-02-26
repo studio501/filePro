@@ -40,4 +40,7 @@ T stringToNum(const string &str)
 	return num;
 }
 
+//比较c1 c2
+int comp(int c1,int c2);
+
 #endif // !COMMON_FUNC__H__

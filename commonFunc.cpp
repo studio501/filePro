@@ -46,3 +46,11 @@ double diffCompute2(int n,double x)
 	computeTime(t1,t2,"diffCompute1");
 	return sum;
 }
+
+//比较c1 c2
+int comp(int c1,int c2)
+{
+	if(c1<c2) return -1;
+	if(c1==c2) return 0;
+	return 1;
+}
