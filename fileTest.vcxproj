@@ -79,6 +79,7 @@
     <ClInclude Include="commonFunc.h" />
     <ClInclude Include="DSList.h" />
     <ClInclude Include="DSList.hpp" />
+    <ClInclude Include="GList.h" />
     <ClInclude Include="hstringTest.h" />
     <ClInclude Include="listConfig.h" />
     <ClInclude Include="lQueueTest.h" />
@@ -98,6 +99,7 @@
   <ItemGroup>
     <ClCompile Include="commonFunc.cpp" />
     <ClCompile Include="fileTest.cpp" />
+    <ClCompile Include="GList.cpp" />
     <ClCompile Include="hstringTest.cpp" />
     <ClCompile Include="lQueueTestMain.cpp" />
     <ClCompile Include="lstringTest.cpp" />
