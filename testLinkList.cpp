@@ -1440,8 +1440,10 @@ void vi_saveToFile(ElemType &a)
 	fout.close();
 }
 
+};
 void testLinkListMain()
 {
+	using namespace LL;
 	LinkList L;
 	initList(L);
 	for(int i=1;i<=15;++i)
@@ -1648,4 +1650,3 @@ void testLinkListMain()
 	mulitplyPolyn(P5,P6);
 	printPolyn(P5);
 }
-};

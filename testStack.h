@@ -5,18 +5,6 @@
 #define STACK_INC_SIZE  20
 typedef int SElemType ;  //for common test
 
-//struct PosType
-//{
-//	int x;//行值
-//	int y;//列值
-//};
-//struct SElemType
-//{
-//	int ord;//通道块在路径上的序列号
-//	int di;//向下一个通道块走的方向 0~3:东南西北
-//	PosType seat;//通道块在迷宫中的位置
-//};
-
 
 struct SqStack
 {

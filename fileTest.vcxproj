@@ -91,6 +91,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testArray.h" />
     <ClInclude Include="testCLMatrix.h" />
+    <ClInclude Include="testLinkBiTree.h" />
     <ClInclude Include="testLinkList.h" />
     <ClInclude Include="testList.h" />
     <ClInclude Include="testRLSMatrix.h" />
@@ -114,8 +115,8 @@
     </ClCompile>
     <ClCompile Include="testArray.cpp" />
     <ClCompile Include="testCLMatrix.cpp" />
+    <ClCompile Include="testLinkBiTree.cpp" />
     <ClCompile Include="testLinkList.cpp" />
-    <ClCompile Include="testLinkListMain.cpp" />
     <ClCompile Include="testList.cpp" />
     <ClCompile Include="testListMain.cpp" />
     <ClCompile Include="testRLSMatrix.cpp" />

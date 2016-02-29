@@ -339,7 +339,5 @@ void subtractPolyn(polynomial &Pa,polynomial &Pb);
 //两个多项式相乘
 void mulitplyPolyn(polynomial &Pa,polynomial &Pb);
 
-//测试主函数
-void testLinkListMain();
 };
 #endif
