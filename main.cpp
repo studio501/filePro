@@ -44,6 +44,8 @@ void testCLSMatrix();
 
 void testGListMain();
 
+void testSqBiTreeMain();
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
@@ -68,7 +70,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	//testRLSMatrix();
 
 	//testCLSMatrix();
-	testGListMain();
+	//testGListMain();
+	testSqBiTreeMain();
 	system("pause");
 	return 0;
 }
