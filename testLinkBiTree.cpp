@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "testLinkBiTree.h"
 #include "queueTest.h"
-#include "testStack.h"
+#include <stack>
 
 namespace LKT{
 typedef BiTree QElemType;
@@ -33,9 +33,9 @@ void destroyBiTree(BiTree &T)
 }
 
 //创建一个树结点
-void makeBiTreeNode(BiTree &T,char *buf,int &i)
+void makeBiTreeNode(BiTree &T,TElemType *buf,int &i)
 {
-	if(buf[i]=='\0') return;
+	if(buf[i]==EndFlag) return;
 	TElemType ch=(TElemType)buf[i];
 	if(ch==Nil) 
 	{
@@ -58,9 +58,10 @@ void createBiTree(BiTree &T,int nLine)
 {
 	int i=0;
 	initBiTree(T);
+	TElemType s[MAX_TREE_SIZE];
+	ifstream fin;
 #if CHAR
-	char s[MAX_TREE_SIZE];
-	ifstream fin("charBitTreeLink.txt",ios_base::in);
+	fin.open("charBitTreeLink.txt",ios_base::in);
 	if(fin.is_open())
 	{
 		int curLine=0;
@@ -69,34 +70,27 @@ void createBiTree(BiTree &T,int nLine)
 			fin.getline(s,MAX_TREE_SIZE);
 			++curLine;
 		}
-		makeBiTreeNode(T,s,i);
+		fin.close();
 	}
 #else
-	//cout<<"请按层序输入结点的值(整型)，0表示空结点，输999结束。结点数≤"<<MAX_TREE_SIZE<<":"<<endl;
-	char s[MAX_TREE_SIZE];
-	ifstream fin("intBitTree.txt",ios_base::in);
+	char temp[MAX_TREE_SIZE];
+	int j=0;
+	fin.open("intBitTreeLink.txt",ios_base::in);
 	if(fin.is_open())
 	{
 		int curLine=1;
 		while(curLine<nLine)
 		{
-			fin.getline(s,MAX_TREE_SIZE);
+			fin.getline(temp,MAX_TREE_SIZE);
 			++curLine;
 		}
+		while(fin>>s[j++]);
+		s[--j]=EndFlag;
 
-		while(1)
-		{
-			fin>>T[i];
-			if(T[i]==999)
-			{
-				T[i]=Nil;
-				break;
-			}
-			++i;
-		}
+		fin.close();
 	}
-	
 #endif
+	makeBiTreeNode(T,s,i);
 }
 
 //判断二叉树是否为空
@@ -315,15 +309,50 @@ void inOrderTraverse(BiTree T,visitFunc func)
 //中序遍历(非递归)
 void inOrderTraverse1(BiTree T,visitFunc func)
 {
-	SqStack S;
-	initStack(S);
-	while(T||!isStackEmpty(S))
+	stack<SElemType> S;
+	while(T||!S.empty())
 	{
 		if(T)
 		{
-			//pushStack(S,T);
+			S.push(T);
+			T=T->lchild;
+		}
+		else
+		{
+			T = S.top();
+			S.pop();
+			func(T->data);
+			T=T->rchild;
 		}
 	}
+	cout<<endl;
+}
+
+//中序遍历(非递归)
+void inOrderTraverse2(BiTree T,visitFunc func)
+{
+	stack<SElemType> S;
+	BiTree p;
+	S.push(T);
+	while(!S.empty())
+	{
+		p = S.top();
+		while(p)
+		{
+			S.push(p->lchild);
+			p = S.top();
+		}
+		p=S.top();
+		S.pop();
+		if(!S.empty())
+		{
+			p = S.top();
+			S.pop();
+			func(p->data);
+			S.push(p->rchild);
+		}
+	}
+	cout<<endl;
 }
 
 //后序遍历树
@@ -335,6 +364,26 @@ void postOrderTraverse(BiTree T,visitFunc func)
 		inOrderTraverse(T->rchild,func);
 		func(T->data);
 	}
+}
+
+//层序遍历
+void levelOrderTraverse(BiTree T,visitFunc func)
+{
+	LinkQueue<QElemType> q;
+	QElemType a;
+	if(T)
+	{
+		initQueue(q);
+		enQueue(q,T);
+		while(!isQueueEmpty(q))
+		{
+			deQueue(q,a);
+			func(a->data);
+			if(a->lchild!=NULL) enQueue(q,a->lchild);
+			if(a->rchild!=NULL) enQueue(q,a->rchild);
+		}
+	}
+	cout<<endl;
 }
 
 //逐层,按序号输出二叉树
@@ -349,49 +398,35 @@ void print(BiTree T)
 void testLinkBiTreeMain()
 {
 	using namespace LKT;
+	BiTree T=NULL,p,c;
+	TElemType e1,e2;
 #if CHAR
-	BiTree T=NULL;
-	LKT::createBiTree(T);
+	createBiTree(T);
+#else
+	createBiTree(T);
+#endif
 	cout<<"pre order traverse:\n";
 	preOrderTraverse(T,visit_tree);
-	cout<<"in order traverse:\n";
+	cout<<"\nin order traverse:\n";
 	inOrderTraverse(T,visit_tree);
-	cout<<"depth is : "<<biTreeDepth(T)<<endl;
-#else
-	SqBiTree T,s;
-	createBiTree(T);
-	cout<<"tree depth "<<biTreeDepth(T)<<endl;
-	position p;
-	TElemType e;
-	int j;
-	root(T,e);
-	cout<<"root is "<<e<<endl;
+	cout<<"\ndepth is : "<<biTreeDepth(T)<<endl;
+	cout<<"in order traverse1:\n";
+	inOrderTraverse1(T,visit_tree);
+	cout<<"in order traverse2:\n";
+	inOrderTraverse2(T,visit_tree);
+	cout<<"level order traverse:\n";
 	levelOrderTraverse(T,visit_tree);
-	inOrderTraverse(T,visit_tree);
-	preOrderTraverse(T,visit_tree);
-	postOrderTraverse(T,visit_tree);
-	cout<<"请输入待修改结点的层号本层序号: 2 2\n";
-	//cin>>p.level>>p.order;
-	p.level=2;p.order=2;
-	e=value(T,p);
-	cout<<"待修改结点的原值为"<<e<<"请输入新值: 8";
-	//cin>>e;
-	e=8;
-	assign(T,p,e);
-	preOrderTraverse(T,visit_tree);
-	cout<<"结点"<<e<<"的双亲为"<<parent(T,e)<<",左右孩子分别为";
-	cout<<leftChild(T,e)<<","<<rightChild(T,e)<<",左右兄弟分别为";
-	cout<<leftSibling(T,e)<<","<<rightSibling(T,e)<<endl;
-	createBiTree(s,2);
-	cout<<"树s插到树T中,请输入树T中树s的双亲结点s为左(0)或右(1)子树: 2 1\n";
-	//cin>>e>>j;
-	e=2;j=1;
-	insertChild(T,e,j,s);
-	print(T);
-	clearBiTree(T);
-	if(root(T,e)) cout<<e<<endl;
-	else cout<<"树空,无根\n";
-#endif
-	
-	
+	e1=root(T);
+	cout<<"root is : ";
+	visit_tree(e1);
+	cout<<endl;
+	p=point(T,e1);
+	cout<<"node value is "<<value(p)<<endl;
+	cout<<"input new value: k";
+	e2='k';
+	assign(p,e2);
+	cout<<"level order traverse:\n";
+	levelOrderTraverse(T,visit_tree);
+	c=p->lchild;
+	levelOrderTraverse(c,visit_tree);
 }

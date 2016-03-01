@@ -10,15 +10,17 @@
 using namespace std;
 namespace LKT{
 //二叉树的顺序存储结构
-//#define  CHAR 0
-#define  CHAR 1
+#define  CHAR 0
+//#define  CHAR 1
 
 #if CHAR
 	typedef char TElemType;
 	TElemType Nil='#';
+	TElemType EndFlag='\0';
 #else
 	typedef int TElemType;
 	TElemType Nil=0;
+	TElemType EndFlag=999;
 #endif
 
 //start delete
@@ -51,7 +53,7 @@ void initBiTree(BiTree &T);
 void destroyBiTree(BiTree &T);
 
 //创建一个树结点
-void makeBiTreeNode(BiTree &T,char *buf,int &i);
+void makeBiTreeNode(BiTree &T,TElemType *buf,int &i);
 
 //先序创建链表二叉树
 void createBiTree(BiTree &T,int nLine=1);
@@ -106,6 +108,12 @@ void postOrderTraverse(BiTree T,visitFunc func);
 
 //中序遍历(非递归)
 void inOrderTraverse1(BiTree T,visitFunc func);
+
+//中序遍历(非递归)
+void inOrderTraverse2(BiTree T,visitFunc func);
+
+//层序遍历
+void levelOrderTraverse(BiTree T,visitFunc func);
 
 //逐层,按序号输出二叉树
 void print(BiTree T);

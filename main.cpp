@@ -73,8 +73,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	//testCLSMatrix();
 	//testGListMain();
-	//testSqBiTreeMain();
-	testLinkBiTreeMain();
+	testSqBiTreeMain();
+	//testLinkBiTreeMain();
 	system("pause");
 	return 0;
 }
