@@ -98,6 +98,7 @@
     <ClInclude Include="testList.h" />
     <ClInclude Include="testRLSMatrix.h" />
     <ClInclude Include="testSqBiTree.h" />
+    <ClInclude Include="testSqTree.h" />
     <ClInclude Include="testStack.h" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +126,7 @@
     <ClCompile Include="testListMain.cpp" />
     <ClCompile Include="testRLSMatrix.cpp" />
     <ClCompile Include="testSqBiTree.cpp" />
+    <ClCompile Include="testSqTree.cpp" />
     <ClCompile Include="testStack.cpp" />
     <ClCompile Include="testStackMain.cpp" />
   </ItemGroup>
