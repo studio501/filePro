@@ -90,9 +90,11 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testArray.h" />
+    <ClInclude Include="testBiThrTree.h" />
     <ClInclude Include="testCLMatrix.h" />
     <ClInclude Include="testLinkBiTree.h" />
     <ClInclude Include="testLinkList.h" />
+    <ClInclude Include="testLinkPBiTree.h" />
     <ClInclude Include="testList.h" />
     <ClInclude Include="testRLSMatrix.h" />
     <ClInclude Include="testSqBiTree.h" />
@@ -114,9 +116,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="testArray.cpp" />
+    <ClCompile Include="testBiThrTree.cpp" />
     <ClCompile Include="testCLMatrix.cpp" />
     <ClCompile Include="testLinkBiTree.cpp" />
     <ClCompile Include="testLinkList.cpp" />
+    <ClCompile Include="testLinkPBiTree.cpp" />
     <ClCompile Include="testList.cpp" />
     <ClCompile Include="testListMain.cpp" />
     <ClCompile Include="testRLSMatrix.cpp" />

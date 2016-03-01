@@ -47,6 +47,10 @@ void testSqBiTreeMain();
 
 void testLinkBiTreeMain();
 
+void testLinkBiPTreeMain();
+
+void testBiThrTreeMain();
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
@@ -73,8 +77,10 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	//testCLSMatrix();
 	//testGListMain();
-	testSqBiTreeMain();
+	//testSqBiTreeMain();
 	//testLinkBiTreeMain();
+	//testLinkBiPTreeMain();
+	testBiThrTreeMain();
 	system("pause");
 	return 0;
 }

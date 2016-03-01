@@ -1,12 +1,12 @@
 
 #include "stdafx.h"
-#include "testLinkBiTree.h"
+#include "testLinkPBiTree.h"
 #include "queueTest.h"
 #include <stack>
 
-namespace LKT{
-typedef BiTree QElemType;
-typedef BiTree SElemType;
+namespace LKPT{
+typedef BiPTree QElemType;
+typedef BiPTree SElemType;
 
 //打印函数
 void visit_tree(TElemType e)
@@ -15,13 +15,13 @@ void visit_tree(TElemType e)
 }
 
 //构造空二叉树T
-void initBiTree(BiTree &T)
+void initBiTree(BiPTree &T)
 {
 	T=NULL;
 }
 
 //销毁树
-void destroyBiTree(BiTree &T)
+void destroyBiTree(BiPTree &T)
 {
 	if(T)
 	{
@@ -33,7 +33,7 @@ void destroyBiTree(BiTree &T)
 }
 
 //创建一个树结点
-void makeBiTreeNode(BiTree &T,TElemType *buf,int &i)
+void makeBiTreeNode(BiPTree &T,TElemType *buf,int &i)
 {
 	if(buf[i]==EndFlag) return;
 	TElemType ch=(TElemType)buf[i];
@@ -44,17 +44,20 @@ void makeBiTreeNode(BiTree &T,TElemType *buf,int &i)
 	}
 	else
 	{
-		T=(BiTree)malloc(sizeof(BiTNode));
+		T=(BiPTree)malloc(sizeof(BiTPNode));
 		if(!T) exit(OVERFLOW);
 		T->data=ch;
+		T->parent=NULL;
 		++i;
 		makeBiTreeNode(T->lchild,buf,i);
+		if(T->lchild) T->lchild->parent=T;
 		makeBiTreeNode(T->rchild,buf,i);
+		if(T->rchild) T->rchild->parent=T;
 	}
 }
 
 //按层次顺序输入二叉树中的结点值
-void createBiTree(BiTree &T,int nLine)
+void createBiTree(BiPTree &T,int nLine)
 {
 	int i=0;
 	initBiTree(T);
@@ -94,14 +97,14 @@ void createBiTree(BiTree &T,int nLine)
 }
 
 //判断二叉树是否为空
-bool biTreeEmpty(BiTree T)
+bool biTreeEmpty(BiPTree T)
 {
 	if(T) return false;
 	else return true;
 }
 
 //求树的深度
-int biTreeDepth(BiTree T)
+int biTreeDepth(BiPTree T)
 {
 	int i,j;
 	if(!T) return 0;
@@ -117,52 +120,39 @@ int biTreeDepth(BiTree T)
 }
 
 //返回树的根
-TElemType root(BiTree T)
+TElemType root(BiPTree T)
 {
 	if(biTreeEmpty(T)) return Nil;
 	else return T->data;	
 }
 
 //返回处于位置e的结点的值
-TElemType value(BiTree p)
+TElemType value(BiPTree p)
 {
 	return p->data;
 }
 
 //给处于e的位置赋新值
-void assign(BiTree p,TElemType value)
+void assign(BiPTree p,TElemType value)
 {
 	p->data=value;
 }
 
 //若e是树的非根结点,则返回它的双亲,否则返回空
-TElemType parent(BiTree T,TElemType e)
+TElemType parent(BiPTree T,TElemType e)
 {
-	LinkQueue<QElemType> q;
-	QElemType a;
+	BiPTree a;
 	if(T)
 	{
-		initQueue(q);
-		enQueue(q,T);
-		while(!isQueueEmpty(q))
-		{
-			deQueue(q,a);
-			if(a->lchild&&a->lchild->data==e||a->rchild&&a->rchild->data==e)
-				return a->data;
-			else
-			{
-				if(a->lchild)
-					enQueue(q,a->lchild);
-				if(a->rchild)
-					enQueue(q,a->rchild);
-			}
-		}
+		a=point(T,e);
+		if(a&&a!=T)
+			return a->parent->data;
 	}
 	return Nil;
 }
 
 //返回二叉树中指向元素值为s的结点的指针
-BiTree point(BiTree T,TElemType s)
+BiPTree point(BiPTree T,TElemType s)
 {
 	LinkQueue<QElemType> q;
 	QElemType a;
@@ -185,10 +175,10 @@ BiTree point(BiTree T,TElemType s)
 }
 
 //返回e的左孩子
-TElemType leftChild(BiTree T,TElemType e)
+TElemType leftChild(BiPTree T,TElemType e)
 {
 	
-	BiTree a;
+	BiPTree a;
 	if(T)
 	{
 		a=point(T,e);
@@ -199,10 +189,10 @@ TElemType leftChild(BiTree T,TElemType e)
 }
 
 //返回e的右孩子
-TElemType rightChild(BiTree T,TElemType e)
+TElemType rightChild(BiPTree T,TElemType e)
 {
 	
-	BiTree a;
+	BiPTree a;
 	if(T)
 	{
 		a=point(T,e);
@@ -213,56 +203,50 @@ TElemType rightChild(BiTree T,TElemType e)
 }
 
 //返回e的左孩子或者空
-TElemType leftSibling(BiTree T,TElemType e)
+TElemType leftSibling(BiPTree T,TElemType e)
 {
 	
-	TElemType a;
-	BiTree p;
+	BiPTree a;
 	if(T)
 	{
-		a=parent(T,e);
-		if(a!=Nil)
-		{
-			p=point(T,a);
-			if(p->lchild&&p->rchild&&p->rchild->data==e)
-				return p->lchild->data;
-		}
+		a=point(T,e);
+		if(a&&a!=T&&a->parent->lchild&&a->parent->lchild!=a)
+			return a->parent->lchild->data;
 	}
 	return Nil;
 }
 
 //返回e的右兄弟或者空
-TElemType rightSibling(BiTree T,TElemType e)
+TElemType rightSibling(BiPTree T,TElemType e)
 {
-	TElemType a;
-	BiTree p;
+	BiPTree a;
 	if(T)
 	{
-		a=parent(T,e);
-		if(a!=Nil)
-		{
-			p=point(T,a);
-			if(p->lchild&&p->rchild&&p->lchild->data==e)
-				return p->rchild->data;
-		}
+		a=point(T,e);
+		if(a&&a!=T&&a->parent->rchild&&a->parent->rchild!=a)
+			return a->parent->rchild->data;
 	}
 	return Nil;
 }
 
 //插入c为T中p结点的左或右子树
-bool insertChild(BiTree p,int LR,BiTree c)
+bool insertChild(BiPTree p,int LR,BiPTree c)
 {
 	if(p)
 	{
 		if(LR==0)
 		{
 			c->rchild=p->lchild;
+			if(c->rchild) c->rchild->parent=c;
 			p->lchild=c;
+			c->parent=p;
 		}
 		else
 		{
 			c->rchild=p->rchild;
+			if(c->rchild) c->rchild->parent=c;
 			p->rchild=c;
+			c->parent=p;
 		}
 		return true;
 	}
@@ -270,7 +254,7 @@ bool insertChild(BiTree p,int LR,BiTree c)
 }
 
 //根据LR为1 或0,删除T中p所指结点的左或右子树
-bool deleteChild(BiTree p,int LR)
+bool deleteChild(BiPTree p,int LR)
 {
 	if(p)
 	{
@@ -285,7 +269,7 @@ bool deleteChild(BiTree p,int LR)
 
 
 //先序遍历树
-void preOrderTraverse(BiTree T,visitFunc func)
+void preOrderTraverse(BiPTree T,visitFunc func)
 {
 	if(T)
 	{
@@ -296,7 +280,7 @@ void preOrderTraverse(BiTree T,visitFunc func)
 }
 
 //中序遍历树
-void inOrderTraverse(BiTree T,visitFunc func)
+void inOrderTraverse(BiPTree T,visitFunc func)
 {
 	if(T)
 	{
@@ -307,7 +291,7 @@ void inOrderTraverse(BiTree T,visitFunc func)
 }
 
 //中序遍历(非递归)
-void inOrderTraverse1(BiTree T,visitFunc func)
+void inOrderTraverse1(BiPTree T,visitFunc func)
 {
 	stack<SElemType> S;
 	while(T||!S.empty())
@@ -329,10 +313,10 @@ void inOrderTraverse1(BiTree T,visitFunc func)
 }
 
 //中序遍历(非递归)
-void inOrderTraverse2(BiTree T,visitFunc func)
+void inOrderTraverse2(BiPTree T,visitFunc func)
 {
 	stack<SElemType> S;
-	BiTree p;
+	BiPTree p;
 	S.push(T);
 	while(!S.empty())
 	{
@@ -356,7 +340,7 @@ void inOrderTraverse2(BiTree T,visitFunc func)
 }
 
 //后序遍历树
-void postOrderTraverse(BiTree T,visitFunc func)
+void postOrderTraverse(BiPTree T,visitFunc func)
 {
 	if(T)
 	{
@@ -367,7 +351,7 @@ void postOrderTraverse(BiTree T,visitFunc func)
 }
 
 //层序遍历
-void levelOrderTraverse(BiTree T,visitFunc func)
+void levelOrderTraverse(BiPTree T,visitFunc func)
 {
 	LinkQueue<QElemType> q;
 	QElemType a;
@@ -386,14 +370,13 @@ void levelOrderTraverse(BiTree T,visitFunc func)
 	cout<<endl;
 }
 
-
 };
 
 //测试二叉树主函数
-void testLinkBiTreeMain()
+void testLinkBiPTreeMain()
 {
-	using namespace LKT;
-	BiTree T=NULL,p,c;
+	using namespace LKPT;
+	BiPTree T=NULL,p,c;
 	TElemType e1,e2;
 #if CHAR
 	createBiTree(T);

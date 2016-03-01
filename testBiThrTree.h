@@ -1,5 +1,5 @@
-#ifndef __TESTLINKBITREE__HH_
-#define __TESTLINKBITREE__HH_
+#ifndef __TESBITHRTREE__HH_
+#define __TESBITHRTREE__HH_
 
 #include <malloc.h>
 #include <process.h>
@@ -8,10 +8,10 @@
 #include <fstream>
 
 using namespace std;
-namespace LKT{
+namespace LKTHR{
 //二叉树的顺序存储结构
-//#define  CHAR 0
-#define  CHAR 1
+#define  CHAR 0
+//#define  CHAR 1
 
 #if CHAR
 	typedef char TElemType;
@@ -25,11 +25,19 @@ namespace LKT{
 
 #define MAX_TREE_SIZE 100
 
-typedef struct BiTNode
+enum PointerTag
+{
+	Link,
+	Thread
+};
+
+typedef struct BiThrNode
 {
 	TElemType data;
-	BiTNode *lchild,*rchild;
-}BiTNode,*BiTree;
+	BiThrNode *lchild,*rchild;
+	PointerTag LTag,RTag;
+}BiThrNode,BiTNode,*BiThrTree,*BiTree;
+
 
 #define clearBiTree destroyBiTree
 
@@ -40,16 +48,37 @@ typedef void(*visitFunc)(TElemType);
 void visit_tree(TElemType e);
 
 //构造空二叉树T
-void initBiTree(BiTree &T);
+void initBiTree(BiThrTree &T);
 
 //销毁树
-void destroyBiTree(BiTree &T);
+void destroyBiTree(BiThrTree &T);
+
+//销毁线索二叉树
+void destroyBiThrTree(BiThrTree &Thrt);
 
 //创建一个树结点
-void makeBiTreeNode(BiTree &T,TElemType *buf,int &i);
+void makeBiTreeNode(BiThrTree &T,TElemType *buf,int &i);
 
 //先序创建链表二叉树
-void createBiTree(BiTree &T,int nLine=1);
+void createBiTree(BiThrTree &T,int nLine=1);
+
+//通过中序遍历进行中序线索化
+void inThreading(BiThrTree p);
+
+//中序遍历树并阍其中序线索化 Thrt指向头结点
+void inOrderThreading(BiThrTree &Thrt,BiThrTree T);
+
+//中序遍历线索二叉树非递归算法
+void inOrderTraverse_Thr(BiThrTree T,visitFunc func);
+
+//先序化
+void preThreading(BiThrTree p);
+
+//先序遍历树并先序线索化树
+void preOrderThreading(BiThrTree &Thrt,BiThrTree T);
+
+//先序遍历线索二叉树
+void preOrderTraverse_Thr(BiThrTree T,visitFunc func);
 
 //判断二叉树是否为空
 bool biTreeEmpty(BiTree T);
@@ -84,29 +113,6 @@ TElemType leftSibling(BiTree T,TElemType e);
 //返回e的右兄弟或者空
 TElemType rightSibling(BiTree T,TElemType e);
 
-//插入c为T中p结点的左或右子树
-bool insertChild(BiTree p,int LR,BiTree c);
-
-//根据LR为1 或0,删除T中p所指结点的左或右子树
-bool deleteChild(BiTree p,int LR);
-
-//先序遍历树
-void preOrderTraverse(BiTree T,visitFunc func);
-
-//中序遍历树
-void inOrderTraverse(BiTree T,visitFunc func);
-
-//后序遍历树
-void postOrderTraverse(BiTree T,visitFunc func);
-
-//中序遍历(非递归)
-void inOrderTraverse1(BiTree T,visitFunc func);
-
-//中序遍历(非递归)
-void inOrderTraverse2(BiTree T,visitFunc func);
-
-//层序遍历
-void levelOrderTraverse(BiTree T,visitFunc func);
 
 };
 #endif // !__TESTSQBITREE__HH_
