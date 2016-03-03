@@ -81,6 +81,7 @@
     <ClInclude Include="DSList.hpp" />
     <ClInclude Include="GList.h" />
     <ClInclude Include="hstringTest.h" />
+    <ClInclude Include="huffmanTree.h" />
     <ClInclude Include="listConfig.h" />
     <ClInclude Include="lQueueTest.h" />
     <ClInclude Include="lstringTest.h" />
@@ -107,6 +108,7 @@
     <ClCompile Include="fileTest.cpp" />
     <ClCompile Include="GList.cpp" />
     <ClCompile Include="hstringTest.cpp" />
+    <ClCompile Include="huffmanTree.cpp" />
     <ClCompile Include="lQueueTestMain.cpp" />
     <ClCompile Include="lstringTest.cpp" />
     <ClCompile Include="main.cpp" />

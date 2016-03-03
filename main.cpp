@@ -55,6 +55,8 @@ void testSqTreeMain();
 
 void testCSTreeMain();
 
+void huffmanTreeMain();
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
@@ -86,7 +88,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	//testLinkBiPTreeMain();
 	//testBiThrTreeMain();
 	//testSqTreeMain();
-	testCSTreeMain();
+	//testCSTreeMain();
+	huffmanTreeMain();
 	system("pause");
 	return 0;
 }
