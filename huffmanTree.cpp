@@ -169,7 +169,11 @@ void getWeightArr(int * &w,int &len,int nLine,const char * hfile)
 			fin.getline(temp,MAX_LINE_SIZE);
 			++curLine;
 		}
-		while(fin>>w[i++]);
+		while(fin>>w[i])
+		{
+			++i;
+			if(i>=n) break;
+		}
 		fin.close();
 	}
 }
@@ -179,16 +183,22 @@ void huffmanTreeMain()
 	HuffmanTree HT,HT1;
 	HuffmanCode HC,HC1;
 	int *w=NULL,*w1=NULL,n,n1,i=0,temp;
+
 	getWeightArr(w,n);
-	getWeightArr(w1,n1,2);
-	
+	n=4;
+	w=(int*)malloc(sizeof(int)*n);
+	w[0]=7;w[1]=5;w[2]=2;w[3]=4;
+
+
 	huffmanCoding(HT,HC,w,n);
-	huffmanCoding1(HT1,HC1,w1,n1);
 	for(i=1;i<=n;++i)
 		cout<<HC[i]<<" ";
 	cout<<endl;
+
+	getWeightArr(w1,n1,2);
+	huffmanCoding1(HT1,HC1,w1,n1);
 	for(i=1;i<=n1;++i)
 		cout<<HC1[i]<<" ";
+	cout<<endl;
 
-	int a=100;
 }
