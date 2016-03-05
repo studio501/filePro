@@ -7,7 +7,7 @@
 #include <iostream>
 using namespace std;
 
-#define MAX_STR_LEN 40
+#define MAX_STR_LEN 2048
 typedef char SString[MAX_STR_LEN+1];
 
 //生成一个其值等于chars的串T

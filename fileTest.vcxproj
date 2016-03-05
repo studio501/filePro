@@ -135,6 +135,7 @@
     <ClCompile Include="testSqTree.cpp" />
     <ClCompile Include="testStack.cpp" />
     <ClCompile Include="testStackMain.cpp" />
+    <ClCompile Include="toolLog1.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
