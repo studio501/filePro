@@ -162,7 +162,7 @@ bool replaceStr(SString S,SString T,SString V)
 void strPrint(SString T)
 {
 	for(int i=1;i<=T[0];++i)
-		cout<<T[i];
+		cout<<(char)T[i];
 	cout<<endl;
 }
 
@@ -239,6 +239,38 @@ void server(SString str,SString hstr)
 		strCopy(hstr,str);
 		clearString(str);
 	}
+}
+
+//将数字串转换为数字
+long long ssToNumber(SString str)
+{
+	long long temp=0;
+	if(str[1]!=int('-'))
+	{
+		int len = strLength(str);
+		for(int i=0;i<len;++i)
+		{
+			int a = str[len-i]-int('0');
+			temp+=a*pow(10,i);
+		}
+	}
+	else
+	{
+		int len = strLength(str)-1;
+		if(len>=2)
+		{
+			for(int i=0;i<len;++i)
+			{
+				int a = str[len-i+1]-int('0');
+				temp+=a*pow(10,i);
+			}
+			temp*=-1;
+		}
+		else temp=0;
+	}
+	
+		
+	return temp;
 }
 
 void sstringTestMain()

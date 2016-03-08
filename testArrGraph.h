@@ -27,7 +27,7 @@ enum GraphKind
 
 typedef struct 
 {
-	VRType adj;
+	VRType adj;//顶点关系类型,对无权图1,0表示是否相邻,对带权图,为权值
 	InfoType *info;
 }ArcCell,AdjMatrix[MAX_VERTEXT_NUM][MAX_VERTEXT_NUM];
 
@@ -44,5 +44,11 @@ int locateVex(MGraph G,VertexType u);
 
 //采用数组(邻接矩阵)表示法 构造无向图
 void createFUDG(MGraph &G,const char *filename="GData1.txt");
+
+//采用数组(邻接矩阵)表示法 构造无向网
+void createFUDN(MGraph &G,const char *filename="GData1_w.txt");
+
+//采用数组(邻接矩阵)表示法 构造有向图
+void createDG(MGraph &G,const char *filename="GData3.txt");
 };
 #endif

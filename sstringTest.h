@@ -8,7 +8,8 @@
 using namespace std;
 
 #define MAX_STR_LEN 2048
-typedef char SString[MAX_STR_LEN+1];
+//typedef char SString[MAX_STR_LEN+1];
+typedef int SString[MAX_STR_LEN+1];
 
 //生成一个其值等于chars的串T
 bool strAssign(SString T,char *chars);
@@ -77,5 +78,6 @@ int index_KMP(SString S,SString T,int pos,int next[]);
 //将非空串str分割成两部分：hstr为第一个′,′之前的子串，str为之后的子串
 void server(SString str,SString hstr);
 
-
+//将数字串转换为数字
+long long ssToNumber(SString str);
 #endif

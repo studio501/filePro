@@ -59,9 +59,9 @@ void huffmanTreeMain();
 
 void testArrGraphMain();
 
-void toolMain(int argc, _TCHAR* argv[]);
+void toolMain(int argc, char* argv[]);
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
 	cout<<diffCompute2()<<endl;*/
@@ -95,7 +95,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//testCSTreeMain();
 	//huffmanTreeMain();
 	//testArrGraphMain();
-	toolMain(argc,argv);
+	//toolMain(argc,argv);
 	system("pause");
 	return 0;
 }
