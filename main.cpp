@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 	//testSqTreeMain();
 	//testCSTreeMain();
 	//huffmanTreeMain();
-	//testArrGraphMain();
+	testArrGraphMain();
 	//toolMain(argc,argv);
 	system("pause");
 	return 0;
