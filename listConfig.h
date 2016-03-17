@@ -5,7 +5,6 @@
 #include "commonFunc.h"
 typedef int ElemType;
 
-
 #define mymax(a,b)    (((a) > (b)) ? (a) : (b))
 #define mymin(a,b)    (((a) < (b)) ? (a) : (b))
 

@@ -59,7 +59,10 @@ void huffmanTreeMain();
 
 void testArrGraphMain();
 
+void testALGraphMain();
+
 void toolMain(int argc, char* argv[]);
+
 
 int main(int argc, char* argv[])
 {
@@ -94,8 +97,13 @@ int main(int argc, char* argv[])
 	//testSqTreeMain();
 	//testCSTreeMain();
 	//huffmanTreeMain();
-	testArrGraphMain();
+	//testArrGraphMain();
+	testALGraphMain();
 	//toolMain(argc,argv);
+
+	//void main2_8Main();
+	//includeMain();
+	//include1Main();
 	system("pause");
 	return 0;
 }

@@ -3,7 +3,6 @@
 
 #include "listConfig.h"
 
-
 const int LIST_INIT_SIZE = 10;
 const int LIST_INCREMENT = 8;
 
