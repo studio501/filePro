@@ -85,16 +85,19 @@ void printGraph(ALGraph G);
 void destroyGraph(ALGraph &G);
 
 //返回顶点序号v的值
-VertexType & getVex(MGraph G,int v);
+VertexType & getVex(ALGraph G,int v);
 
 //对v重新赋值
-bool putVex(MGraph &G,VertexType v,VertexType value);
+bool putVex(ALGraph &G,VertexType v,VertexType value);
 
 //返回v的第一个邻接顶点的序号
-int firstAdjVex(MGraph G,VertexType v);
+int firstAdjVex(ALGraph G,VertexType v);
+
+//两条弧是否相等
+bool equalvex(ArcNode a,ArcNode b);
 
 //返回v的相对于w的下一个邻接顶面序号,若w是最后一个邻接顶点返回-1
-int nextAdjVex(MGraph G,VertexType v,VertexType w);
+int nextAdjVex(ALGraph G,VertexType v,VertexType w);
 
 //新增顶点v(但不增加相关的弧)
 void insertVex(MGraph &G,VertexType v);
