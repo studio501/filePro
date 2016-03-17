@@ -4,7 +4,6 @@
 #include "testALGraph.h"
 #include "queueTest.h"
 
-
 namespace ALG{
 typedef VRType QElemType;
 //全局访问标志
@@ -30,36 +29,78 @@ void createGraph(ALGraph &G)
 {
 	int i,j,k,w;
 	VertexType va,vb;
-	ElemType e;
+	ArcNode *e;
+
 	cout<<"请输入图的类型(有向图:0,有向网:1,无向图:2,无向网:3):\n";
 	cin>>G.kind;
-	cout<<"请输入图的顶点数,边数:\n";
-	cin>>G.vexnum>>G.arcnum;
-	printf("请输入%d个顶点的值(<%d个字符):\n",G.vexnum,MAX_NAME);
-	for(i=0;i<G.vexnum;++i)
+
+	char filename[24];
+	sprintf(filename,"GData6_%d.txt",G.kind);
+	ifstream fin(filename,ios_base::in);
+	if(fin.is_open())
 	{
-		cin>>G.vertices[i].data;
-		G.vertices[i].firstarc=NULL;
-	}
-	if(G.kind%2)//net
-		printf("请输入每条弧(边)的权值、弧尾和弧头(以空格作为间隔):\n");
-	else//graph
-		printf("请输入每条弧(边)的弧尾和弧头(以空格作为间隔):\n");
-	for(k=0;k<G.arcnum;++k)//
-	{
-		if(G.kind%2)
-			cin>>w>>va>>vb;
-		else
-			cin>>va>>vb;
-		i=locateVex(G,va);
-		j=locateVex(G,vb);
-		e.info=NULL;
-		e.adjvex=j;
-		if(G.kind%2)
+		
+		fin>>G.vexnum>>G.arcnum;
+		for(i=0;i<G.vexnum;++i)
 		{
-			e.info=(int *)malloc(sizeof(int));
-			*(e.info)=w;
+			fin>>G.vertices[i].data;
+			G.vertices[i].firstarc=NULL;
 		}
+		
+		ArcNode * t = NULL;
+		for(k=0;k<G.arcnum;++k)//
+		{
+			if(G.kind%2)
+				fin>>va>>vb>>w;
+			else
+				fin>>va>>vb;
+			i=locateVex(G,va);
+			j=locateVex(G,vb);
+			e=(ArcNode *)malloc(sizeof(ArcNode));
+			e->info=NULL;
+			e->adjvex=j;
+			if(G.kind%2)
+			{
+				e->info=(int *)malloc(sizeof(int));
+				*(e->info)=w;
+			}
+			e->next=G.vertices[i].firstarc;
+			G.vertices[i].firstarc=e;
+
+			t=e;
+
+			e=(ArcNode*)malloc(sizeof(ArcNode));
+			e->info=NULL;
+			e->adjvex=i;
+			if(G.kind%2)
+			{
+				e->info=t->info;
+			}
+			e->next=G.vertices[j].firstarc;
+			G.vertices[j].firstarc=e;
+		}
+		fin.close();
+	}
+}
+
+//打印图
+void printGraph(ALGraph G)
+{
+	if(G.vexnum<=0) return;
+	for(int i=0;i<G.vexnum;++i)
+	{
+		printf("%d->",i);
+		ArcNode * p = G.vertices[i].firstarc;
+		while(p!=NULL)
+		{
+			if(G.kind%2)
+				printf("%d(%d)->",p->adjvex,*(p->info) );
+			else printf("%d->",p->adjvex);
+			
+			
+			p=p->next;
+		}
+		printf("NULL\n");
 	}
 }
 
@@ -266,6 +307,7 @@ void display(MGraph G)
 void testALGraphMain()
 {
 	using namespace ALG;
-	
-
+	ALGraph g;
+	createGraph(g);
+	printGraph(g);
 }

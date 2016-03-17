@@ -43,18 +43,13 @@ struct MGraph
 };
 //-------------------
 
-struct ElemType
-{
-	int adjvex;
-	InfoType *info;
-};
 
 struct ArcNode
 {
-	ElemType data;
-	ArcNode * nextarc;
+	int adjvex;
+	InfoType *info;
+	ArcNode * next;
 };
-//36
 typedef struct
 {
 	VertexType data;
@@ -81,7 +76,10 @@ void visit(VertexType i);
 int locateVex(ALGraph G,VertexType u);
 
 //构造图
-void createGraph(MGraph &G);
+void createGraph(ALGraph &G);
+
+//打印图
+void printGraph(ALGraph G);
 
 //销毁图
 void destroyGraph(ALGraph &G);
