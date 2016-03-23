@@ -100,6 +100,7 @@
     <ClInclude Include="testLinkList.h" />
     <ClInclude Include="testLinkPBiTree.h" />
     <ClInclude Include="testList.h" />
+    <ClInclude Include="testOLGraph.h" />
     <ClInclude Include="testRLSMatrix.h" />
     <ClInclude Include="testSqBiTree.h" />
     <ClInclude Include="testSqTree.h" />
@@ -132,6 +133,7 @@
     <ClCompile Include="testLinkPBiTree.cpp" />
     <ClCompile Include="testList.cpp" />
     <ClCompile Include="testListMain.cpp" />
+    <ClCompile Include="testOLGraph.cpp" />
     <ClCompile Include="testRLSMatrix.cpp" />
     <ClCompile Include="testSqBiTree.cpp" />
     <ClCompile Include="testSqTree.cpp" />

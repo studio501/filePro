@@ -1,5 +1,5 @@
-#ifndef __TESTALGRAPH__HH__
-#define __TESTALGRAPH__HH__
+#ifndef __TESTOLGRAPH__HH__
+#define __TESTOLGRAPH__HH__
 #include <malloc.h>
 #include <process.h>
 
@@ -10,7 +10,7 @@ using namespace std;
 
 
 
-namespace ALG{
+namespace OLG{
 #define MAX_NAME 5
 #define MAX_INFO 20
 #define INFINITY INT_MAX
@@ -41,8 +41,6 @@ struct MGraph
 	int vexnum,arcnum;
 	GraphKind kind;
 };
-//-------------------
-
 
 struct ArcNode
 {
@@ -63,6 +61,41 @@ struct ALGraph
 	int kind;
 };
 
+//-------------------
+struct ArcBox1
+{
+	int tialvex,headvex;
+	InfoType *info;
+	ArcBox1 *hlink,*tlink;
+};
+
+struct ElemType
+{
+	int tailvex,headvex;
+	InfoType *info;
+	ArcBox1 *hlink;
+};
+
+struct ArcBox
+{
+	ElemType data;
+	ArcBox * tlink;
+};
+
+struct VexNode
+{
+	VertexType data;
+	ArcBox1 *firstin;
+	ArcBox *firstout;
+};
+
+struct OLGraph
+{
+	VexNode xlist[MAX_VERTEXT_NUM];
+	int vexnum,arcnum;
+};
+
+
 //#define LNode ArcNode
 //#define next nextarc
 //typedef ArcNode * LinkList;
@@ -73,10 +106,10 @@ typedef void (*visitFunc)(VertexType);
 void visit(VertexType i);
 
 //返回G中顶点u的位置
-int locateVex(ALGraph G,VertexType u);
+int locateVex(OLGraph G,VertexType u);
 
 //构造图
-void createGraph(ALGraph &G);
+void createGraph(OLGraph &G);
 
 //打印图
 void printGraph(ALGraph G);
@@ -85,7 +118,10 @@ void printGraph(ALGraph G);
 bool listInsertFirstVex(ArcNode * &p,ArcNode *e,int pos=1);
 
 //删除边链表第1个结点
-bool listDeleteFirstVex(ArcNode * &p,ArcNode* &e,int pos=1);
+bool listDeleteFirstVex(ArcBox * &p,ArcBox &e,int pos=1);
+
+//定位链表中的元素e
+int listLocateElem(ArcBox *p,ElemType e);
 
 //删除某个结点
 ArcNode * listDeleteElem(ArcNode * p,ArcNode e);
@@ -94,31 +130,31 @@ ArcNode * listDeleteElem(ArcNode * p,ArcNode e);
 ArcNode * point(ArcNode *p,ArcNode e,ArcNode * &p1);
 
 //销毁图
-void destroyGraph(ALGraph &G);
+void destroyGraph(OLGraph &G);
 
 //返回顶点序号v的值
-VertexType & getVex(ALGraph G,int v);
+VertexType & getVex(OLGraph G,int v);
 
 //对v重新赋值
-bool putVex(ALGraph &G,VertexType v,VertexType value);
+bool putVex(OLGraph &G,VertexType v,VertexType value);
 
 //返回v的第一个邻接顶点的序号
-int firstAdjVex(ALGraph G,VertexType v);
+int firstAdjVex(OLGraph G,VertexType v);
 
 //两条弧是否相等
-bool equalvex(ArcNode a,ArcNode b);
+bool equalvex(ElemType a,ElemType b);
 
 //返回v的相对于w的下一个邻接顶面序号,若w是最后一个邻接顶点返回-1
-int nextAdjVex(ALGraph G,VertexType v,VertexType w);
+int nextAdjVex(OLGraph G,VertexType v,VertexType w);
 
 //新增顶点v(但不增加相关的弧)
-void insertVex(ALGraph &G,VertexType v);
+void insertVex(OLGraph &G,VertexType v);
 
 //获取顶点的边链表长度
 int lengthOfAdjVex(ALGraph G,VertexType v);
 
 //删除顶点
-bool deleteVex(ALGraph &G,VertexType v);
+bool deleteVex(OLGraph &G,VertexType v);
 
 //新增弧
 bool insertArc(ALGraph &G,VertexType v,VertexType w);
