@@ -102,14 +102,14 @@ int main(int argc, char* argv[])
 	//testCSTreeMain();
 	//huffmanTreeMain();
 	//testArrGraphMain();
-	//testALGraphMain();
+	testALGraphMain();
 	//testOLGraphMain();
 	//toolMain(argc,argv);
 
 	//void main2_8Main();
 	//includeMain();
 	//include1Main();
-	testAMLGraphMain();
+	//testAMLGraphMain();
 	system("pause");
 	return 0;
 }

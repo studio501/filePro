@@ -146,5 +146,8 @@ void BFSTraverse1(ALGraph G,visitFunc func);
 
 //输出邻接矩阵存储结构的图G
 void display(MGraph G);
+
+//深度优先遍历图,建立树
+
 };
 #endif

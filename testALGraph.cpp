@@ -3,9 +3,11 @@
 
 #include "testALGraph.h"
 #include "queueTest.h"
+//#include "testCSTree.h"
 
 namespace ALG{
 typedef int QElemType;
+//typedef VertexType TElemType;
 //全局访问标志
 bool visited[MAX_VERTEXT_NUM];
 
