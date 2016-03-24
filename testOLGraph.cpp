@@ -52,7 +52,7 @@ void createGraph(OLGraph &G)
 			fin>>v1>>v2;
 			i=locateVex(G,v1);
 			j=locateVex(G,v2);
-			p=(ArcBox *)malloc(sizeof(ArcNode));
+			p=(ArcBox *)malloc(sizeof(ArcBox));
 			p->data.tailvex=i;
 			p->data.headvex=j;
 			p->data.hlink=G.xlist[j].firstin;
@@ -70,44 +70,37 @@ void createGraph(OLGraph &G)
 }
 
 //打印图
-void printGraph(ALGraph G)
+void printGraph(OLGraph G)
 {
 	if(G.vexnum<=0) return;
-	for(int i=0;i<G.vexnum;++i)
+	int i;
+	ArcBox *p=NULL;
+	printf("共%d个顶点: \n",G.vexnum);
+	for(i=0;i<G.vexnum;++i)
+		printf("%s ",G.xlist[i].data);
+	printf("\n%d条弧:\n",G.arcnum);
+	for(i=0;i<G.vexnum;++i)
 	{
-		printf("%d->",i);
-		ArcNode * p = G.vertices[i].firstarc;
-		while(p!=NULL)
+		p=G.xlist[i].firstout;
+		while(p)
 		{
-			if(G.kind%2)
-				printf("%d(%d)->",p->adjvex,*(p->info) );
-			else printf("%d->",p->adjvex);
-			
-			
-			p=p->next;
+			printf("%s→%s ",G.xlist[i].data,G.xlist[p->data.headvex].data);
+			if(p->data.info)
+				printf("权值: %d ",*p->data.info);
+			p=p->tlink;
 		}
-		printf("NULL\n");
+		printf("\n");
 	}
 }
 
-//插在表头
-bool listInsertFirstVex(ArcNode * &p,ArcNode *e,int pos)
-{
-	pos=1;
-	e->next=p->next;
-	p->next=e;
-	return true;
-}
 
 //删除边链表第1个结点
 bool listDeleteFirstVex(ArcBox * &p,ArcBox &e,int pos)
 {
 	if(!p || pos<0 ) return false;
 
-	pos = 1;
-	int i=0;
+	pos=1;
 	ArcBox *q = p;
-	
 	p = p->tlink;
 	e=*q;
 	return true;
@@ -125,16 +118,22 @@ int listLocateElem(ArcBox *p,ElemType e)
 }
 
 //删除某个结点
-ArcNode * listDeleteElem(ArcNode *p,ArcNode e)
+ArcBox * listDeleteElem(ArcBox * p,ArcBox e)
 {
-	
-	return NULL;
-}
-
-//在边链表中找出与e adjx相同的结点
-ArcNode * point(ArcNode *p,ArcNode e,ArcNode * &p1)
-{
-	
+	ArcBox *q = p,*t=p;
+	while(q)
+	{
+		if(equalvex((*q).data,e.data))
+		{
+			t->tlink=q->tlink;
+			return q;
+		}
+		else
+		{
+			t=q;
+			q=q->tlink;
+		}
+	}
 	return NULL;
 }
 
@@ -215,26 +214,6 @@ void insertVex(OLGraph &G,VertexType v)
 	++G.vexnum;
 }
 
-//获取顶点的边链表长度
-int lengthOfAdjVex(ALGraph G,VertexType v)
-{
-	
-	return 0;
-}
-
-//获取顶点的边链表长度
-int lengthOfAdjVex1(ALGraph G,int j)
-{
-	int i=0;
-	if(j<0) return 0;
-	ArcNode * p = G.vertices[j].firstarc;
-	while(p)
-	{
-		p=p->next;
-		++i;
-	}
-	return i;
-}
 
 //删除顶点
 bool deleteVex(OLGraph &G,VertexType v)
@@ -242,100 +221,178 @@ bool deleteVex(OLGraph &G,VertexType v)
 	int i,j,k;
 	ElemType e1,e2;
 	ArcBox *p;
-	ArcBox1 *p1,*p2;
+	ArcBox1 *p1=NULL,*p2=NULL;
 	k=locateVex(G,v);
 	if(k<0) return false;
 
+	ArcBox a1;
+	a1.data.headvex = k;
 	e1.headvex=k;
+	for(j=0;j<G.vexnum;++j)//顶点v的入弧是其它弧的出弧
+	{
+		ArcBox * t = listDeleteElem(G.xlist[j].firstout,a1);
+		if(t)
+		{
+			--G.arcnum;
+			if(t->data.info)
+			{
+				free(t->data.info);
+				t->data.info=NULL;
+			}
+		}
+	}
+
+	//删除顶点v的出弧
 	for(j=0;j<G.vexnum;++j)
 	{
-		
+		p1=G.xlist[j].firstin;
+		while(p1&&p1->tialvex!=k)
+		{
+			p2=p1;
+			p1=p1->hlink;
+		}
+		if(p1)
+		{
+			if(p1==G.xlist[j].firstin) G.xlist[j].firstin=p1->hlink;
+			else p2->hlink=p1->hlink;
+			if(p1->info)
+			{
+				free(p1->info);
+				p1->info=NULL;
+			}
+				
+			/*free(p1);
+			p1=NULL;*/
+			--G.arcnum;
+		}
+	}
+
+	for(j=k+1;j<G.vexnum;++j)
+		G.xlist[j-1]=G.xlist[j];
+	--G.vexnum;
+	for(j=0;j<G.vexnum;++j)
+	{
+		p=G.xlist[j].firstout;
+		while(p)
+		{
+			if(p->data.tailvex>k)
+				--p->data.tailvex;
+			if(p->data.headvex>k)
+				--p->data.headvex;
+			p=p->tlink;
+		}
 	}
 	return true;
 }
 
 //新增弧
-bool insertArc(ALGraph &G,VertexType v,VertexType w)
+bool insertArc(OLGraph &G,VertexType v,VertexType w)
 {
-	
+	int i,j;
+	InfoType IncInfo;
+	ArcBox *p=NULL;
+	i=locateVex(G,v);
+	j=locateVex(G,w);
+	if(i<0||j<0) return false;
+	p=(ArcBox*)malloc(sizeof(ArcBox));
+	p->data.tailvex=i;
+	p->data.headvex=j;
+	p->data.hlink=G.xlist[j].firstin;
+	p->tlink=G.xlist[i].firstout;
+	G.xlist[j].firstin=(ArcBox1*)p;
+	G.xlist[i].firstout=p;
+	++G.arcnum;
+	printf("要插入的弧是否带权(是: 1,否: 0): ");
+	cin>>IncInfo;
+	if(IncInfo)
+	{
+		p->data.info=(InfoType*)malloc(sizeof(InfoType));
+		printf("请输入该弧的权值: ");
+		cin>>(*p->data.info);
+	}
+	else
+		p->data.info=NULL;
 	return true;
 }
 
 //删除弧
-bool deleteArc(ALGraph &G,VertexType v,VertexType w)
+bool deleteArc(OLGraph &G,VertexType v,VertexType w)
 {
-	
+	int i,j,k;
+	ElemType e;
+	ArcBox1 *p1=NULL,*p2=NULL;
+	i=locateVex(G,v);
+	j=locateVex(G,w);
+	if(i<0||j<0||i==j) return false;
+	p1=G.xlist[j].firstin;
+	while(p1&&p1->tialvex!=i)
+	{
+		p2=p1;
+		p1=p1->hlink;
+	}
+	if(p1==G.xlist[j].firstin)
+		G.xlist[j].firstin=p1->hlink;
+	else
+		p2->hlink=p1->hlink;
+	e.headvex=j;
+	ArcBox t;
+	t.data.headvex=j;
+	ArcBox *pt = listDeleteElem(G.xlist[i].firstout,t);
+	if(pt)
+	{
+		if(pt->data.info)
+		{
+			free(pt->data.info);
+			pt->data.info=NULL;
+		}
+		--G.arcnum;
+	}
+
 	return true;
 }
 
 //从第v个顶点出发递归地深度优先遍历图G
-void DFS(ALGraph G,int v,visitFunc func)
+void DFS(OLGraph G,int v,visitFunc func)
 {
-	int w;
+	ArcBox *p;
 	visited[v]=true;
-	func(G.vertices[v].data);
-	for(w=firstAdjVex(G,G.vertices[v].data);w>=0;w=nextAdjVex(G,G.vertices[v].data,G.vertices[w].data))
-		if(!visited[w])
-			DFS(G,w,func);
+	func(G.xlist[v].data);
+	p=G.xlist[v].firstout;
+	while(p&&visited[p->data.headvex]) p=p->tlink;
+	if(p&&!visited[p->data.headvex]) DFS(G,p->data.headvex,func);
 }
 
 //从第1个顶点起深度优先遍历图并对每个顶点调用访问函数一次
-void DFSTraverse(ALGraph G,visitFunc func)
+void DFSTraverse(OLGraph G,visitFunc func)
 {
 	int v;
+	for(v=0;v<G.vexnum;++v) visited[v]=false;
 	for(v=0;v<G.vexnum;++v)
-		visited[v]=false;
-	for(v=0;v<G.vexnum;++v)
-		if(!visited[v])
-			DFS(G,v,func);
-	cout<<endl;
-}
-
-//从第v个顶点出发递归地深度优先遍历图G
-void DFS1(ALGraph G,int v,visitFunc func)
-{
-	ArcNode *p;
-	visited[v]=true;
-	func(G.vertices[v].data);
-	for(p=G.vertices[v].firstarc;p;p=p->next)
-		if(!visited[p->adjvex])
-			DFS1(G,p->adjvex,func);
-}
-
-//从第1个顶点起深度优先遍历图并对每个顶点调用访问函数一次
-void DFSTraverse1(ALGraph G,visitFunc func)
-{
-	int v;
-	for(v=0;v<G.vexnum;++v)
-		visited[v]=false;
-	for(v=0;v<G.vexnum;++v)
-		if(!visited[v])
-			DFS1(G,v,func);
+		if(!visited[v]) DFS(G,v,func);
 	cout<<endl;
 }
 
 //按广度优先非递归遍历图G
-void BFSTraverse(ALGraph G,visitFunc func)
+void BFSTraverse(OLGraph G,visitFunc func)
 {
 	int v,u,w;
 	LinkQueue<QElemType> q;
-	for(v=0;v<G.vexnum;++v)
-		visited[v]=false;
+	for(v=0;v<G.vexnum;++v) visited[v]=false;
 	initQueue(q);
 	for(v=0;v<G.vexnum;++v)
 		if(!visited[v])
 		{
 			visited[v]=true;
-			func(G.vertices[v].data);
+			func(G.xlist[v].data);
 			enQueue(q,v);
 			while(!isQueueEmpty(q))
 			{
 				deQueue(q,u);
-				for(w=firstAdjVex(G,G.vertices[u].data);w>=0;w=nextAdjVex(G,G.vertices[u].data,G.vertices[w].data))
+				for(w=firstAdjVex(G,G.xlist[u].data);w>=0;w=nextAdjVex(G,G.xlist[u].data,G.xlist[w].data))
 					if(!visited[w])
 					{
 						visited[w]=true;
-						func(G.vertices[w].data);
+						func(G.xlist[w].data);
 						enQueue(q,w);
 					}
 			}
@@ -343,88 +400,6 @@ void BFSTraverse(ALGraph G,visitFunc func)
 	cout<<endl;
 }
 
-//按广度优先非递归遍历图G
-void BFSTraverse1(ALGraph G,visitFunc func)
-{
-	int v,u,w;
-	ArcNode *p;
-	LinkQueue<QElemType> q;
-	for(v=0;v<G.vexnum;++v)
-		visited[v]=false;
-	initQueue(q);
-	for(v=0;v<G.vexnum;++v)
-		if(!visited[v])
-		{
-			visited[v]=true;
-			func(G.vertices[v].data);
-			enQueue(q,v);
-			while(!isQueueEmpty(q))
-			{
-				deQueue(q,u);
-				for(p=G.vertices[u].firstarc;p;p=p->next)
-					if(!visited[p->adjvex])
-					{
-						visited[p->adjvex]=true;
-						func(G.vertices[p->adjvex].data);
-						enQueue(q,p->adjvex);
-					}
-			}
-			
-		}
-		cout<<endl;
-}
-
-//输出邻接矩阵存储结构的图G
-void display(MGraph G)
-{
-	int i,j;
-	char s[7];
-	switch(G.kind)
-	{
-	case DG:
-		strcpy(s,"有向图");
-		break;
-	case DN:
-		strcpy(s,"有向网");
-		break;
-	case UDG:
-		strcpy(s,"无向图");
-		break;
-	case UDN:
-		strcpy(s,"无向网");
-	}
-	printf("%d个顶点%d条边或弧的%s。顶点依次是: \n",G.vexnum,G.arcnum,s);
-	for(i=0;i<G.vexnum;++i)
-		cout<<G.vexs[i]<<" ";
-	cout<<"\nG.arcs.adj:\n";
-	for(i=0;i<G.vexnum;++i)
-	{
-		for(j=0;j<G.vexnum;++j)
-			if(G.arcs[i][j].adj!=INFINITY)
-			{
-				printf("%11d",G.arcs[i][j].adj);
-			}
-			else printf("%11s","∞");
-			
-		
-			
-		cout<<endl;
-	}
-	cout<<"G.arcs.info:\n";
-	printf("顶点1(弧尾) 顶点2(弧头) 该边或弧的信息：\n");
-	for(i=0;i<G.vexnum;++i)
-		if(G.kind<2)
-		{
-			for(j=0;j<G.vexnum;++j)
-				if(G.arcs[i][j].info)
-					printf("%5s %11s     %s\n",G.vexs[i],G.vexs[j],G.arcs[i][j].info);
-		}
-		else
-			for(j=i+1;j<G.vexnum;++j)
-				if(G.arcs[i][j].info)
-					printf("%5s %11s     %s\n",G.vexs[i],G.vexs[j],G.arcs[i][j].info);
-
-}
 };
 
 void testOLGraphMain()
@@ -432,6 +407,16 @@ void testOLGraphMain()
 	using namespace OLG;
 	OLGraph g;
 	createGraph(g);
+	printGraph(g);
+	cout<<g.xlist[firstAdjVex(g,"v1")].data<<endl;
+	cout<<g.xlist[nextAdjVex(g,"v1","v4")].data<<"\n========\n";
+	//deleteVex(g,"v1");
+	//printGraph(g);
+	//insertArc(g,"v2","v3");
+	//cout<<endl;
+	//printGraph(g);
+	DFSTraverse(g,visit);
+	BFSTraverse(g,visit);
 	destroyGraph(g);
 	int a=100;
 }
