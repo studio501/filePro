@@ -65,7 +65,7 @@ void testOLGraphMain();
 
 void toolMain(int argc, char* argv[]);
 
-
+void testAMLGraphMain();
 
 
 int main(int argc, char* argv[])
@@ -103,12 +103,13 @@ int main(int argc, char* argv[])
 	//huffmanTreeMain();
 	//testArrGraphMain();
 	//testALGraphMain();
-	testOLGraphMain();
+	//testOLGraphMain();
 	//toolMain(argc,argv);
 
 	//void main2_8Main();
 	//includeMain();
 	//include1Main();
+	testAMLGraphMain();
 	system("pause");
 	return 0;
 }

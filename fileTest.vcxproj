@@ -91,6 +91,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testALGraph.h" />
+    <ClInclude Include="testAMLGraph.h" />
     <ClInclude Include="testArray.h" />
     <ClInclude Include="testArrGraph.h" />
     <ClInclude Include="testBiThrTree.h" />
@@ -123,6 +124,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="testALGraph.cpp" />
+    <ClCompile Include="testAMLGraph.cpp" />
     <ClCompile Include="testArray.cpp" />
     <ClCompile Include="testArrGraph.cpp" />
     <ClCompile Include="testBiThrTree.cpp" />
