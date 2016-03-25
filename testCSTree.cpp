@@ -5,6 +5,16 @@
 #include <stack>
 
 namespace CST{
+
+#if CHAR
+	
+	TElemType Nil='#';
+	TElemType EndFlag='\0';
+	TElemType BranchEnd=' ';
+#else
+	TElemType Nil=0;
+	TElemType EndFlag=999;
+#endif
 typedef CSTree QElemType;
 typedef BiTree SElemType;
 
@@ -357,8 +367,10 @@ void levelOrderTraverse(CSTree T,visitFunc func)
 		while(!isQueueEmpty(q))
 		{
 			deQueue(q,p);
+			//CSTree tp = p;
 			if(p->firstchild)
 			{
+				CSTree t = p;
 				p=p->firstchild;
 				func(value(p));
 				enQueue(q,p);
@@ -370,6 +382,17 @@ void levelOrderTraverse(CSTree T,visitFunc func)
 				}
 			}
 		}
+	}
+}
+
+//ÏÈÐò±éÀú
+void preOrderTraverse(CSTree T,visitFunc func)
+{
+	if(T)
+	{
+		func(T->data);
+		preOrderTraverse(T->firstchild,func);
+		preOrderTraverse(T->nextsibling,func);
 	}
 }
 

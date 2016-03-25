@@ -75,6 +75,9 @@ void visit(VertexType i);
 //返回G中顶点u的位置
 int locateVex(ALGraph G,VertexType u);
 
+//创建图根据文件名
+void createGraphWithFileName(ALGraph &G,const char *fileName);
+
 //构造图
 void createGraph(ALGraph &G);
 

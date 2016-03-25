@@ -67,6 +67,15 @@ void toolMain(int argc, char* argv[]);
 
 void testAMLGraphMain();
 
+void testGraphToTree();
+
+void testPrime();
+
+void testCruskal();
+
+void testJoint();
+
+void testTopoLogicSort();
 
 int main(int argc, char* argv[])
 {
@@ -102,7 +111,7 @@ int main(int argc, char* argv[])
 	//testCSTreeMain();
 	//huffmanTreeMain();
 	//testArrGraphMain();
-	testALGraphMain();
+	//testALGraphMain();
 	//testOLGraphMain();
 	//toolMain(argc,argv);
 
@@ -110,6 +119,11 @@ int main(int argc, char* argv[])
 	//includeMain();
 	//include1Main();
 	//testAMLGraphMain();
+	//testGraphToTree();
+	//testPrime();
+	//testCruskal();
+	//testJoint();
+	testTopoLogicSort();
 	system("pause");
 	return 0;
 }

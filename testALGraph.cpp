@@ -3,8 +3,9 @@
 
 #include "testALGraph.h"
 #include "queueTest.h"
-//#include "testCSTree.h"
-
+#include "testCSTree.h"
+using namespace CST;
+using namespace ALG;
 namespace ALG{
 typedef int QElemType;
 //typedef VertexType TElemType;
@@ -26,29 +27,24 @@ int locateVex(ALGraph G,VertexType u)
 	return -1;
 }
 
-//构造图
-void createGraph(ALGraph &G)
+//创建图根据文件名
+void createGraphWithFileName(ALGraph &G,const char *filename)
 {
 	int i,j,k,w;
 	VertexType va,vb;
 	ArcNode *e;
 
-	cout<<"请输入图的类型(有向图:0,有向网:1,无向图:2,无向网:3):\n";
-	cin>>G.kind;
-
-	char filename[24];
-	sprintf(filename,"GData6_%d.txt",G.kind%2);
 	ifstream fin(filename,ios_base::in);
 	if(fin.is_open())
 	{
-		
+
 		fin>>G.vexnum>>G.arcnum;
 		for(i=0;i<G.vexnum;++i)
 		{
 			fin>>G.vertices[i].data;
 			G.vertices[i].firstarc=NULL;
 		}
-		
+
 		ArcNode * t = NULL;
 		for(k=0;k<G.arcnum;++k)//
 		{
@@ -87,6 +83,17 @@ void createGraph(ALGraph &G)
 	}
 }
 
+//构造图
+void createGraph(ALGraph &G)
+{
+	cout<<"请输入图的类型(有向图:0,有向网:1,无向图:2,无向网:3):\n";
+	cin>>G.kind;
+
+	char filename[24];
+	sprintf(filename,"GData6_%d.txt",G.kind%2);
+	createGraphWithFileName(G,filename);
+}
+
 //打印图
 void printGraph(ALGraph G)
 {
@@ -97,9 +104,10 @@ void printGraph(ALGraph G)
 		ArcNode * p = G.vertices[i].firstarc;
 		while(p!=NULL)
 		{
+
 			if(G.kind%2)
-				printf("%d(%d)->",p->adjvex,*(p->info) );
-			else printf("%d->",p->adjvex);
+				printf("%s(%d)->",G.vertices[p->adjvex].data,*(p->info) );
+			else printf("%s->",G.vertices[p->adjvex].data);				//printf("%d->",p->adjvex);
 			
 			
 			p=p->next;
@@ -575,6 +583,56 @@ void display(MGraph G)
 }
 };
 
+//从第v 个顶点出发深度优先遍历图g,建立以T为根的生成树
+void DFSTree(ALGraph G,int v,CSTree &T)
+{
+	bool first = true;
+	int w;
+	CSTree p=NULL,q=NULL;
+	visited[v]=true;
+	for(w=firstAdjVex(G,G.vertices[v].data);w>=0;w=nextAdjVex(G,G.vertices[v].data,G.vertices[w].data))
+		if(!visited[w])
+		{
+			p=(CSTree)malloc(sizeof(CSNode));
+			p->data=G.vertices[w].data[0];
+			p->firstchild=NULL;
+			p->nextsibling=NULL;
+			if(first)
+			{
+				T->firstchild=p;
+				first=false;
+			}
+			else
+				q->nextsibling=p;
+			q=p;
+			DFSTree(G,w,q);
+		}
+}
+
+//建立无向图的深度优先生成森林
+void DFSForest(ALGraph G,CSTree &T)
+{
+	CSTree p=NULL,q=NULL;
+	int v;
+	T=NULL;
+	for(v=0;v<G.vexnum;++v)
+		visited[v]=false;
+	for(v=0;v<G.vexnum;++v)
+		if(!visited[v])
+		{
+			p=(CSTree)malloc(sizeof(CSNode));
+			p->data=G.vertices[v].data[0];
+			p->firstchild=NULL;
+			p->nextsibling=NULL;
+			if(!T) T=p;
+			else
+				q->nextsibling=p;
+			q=p;
+			DFSTree(G,v,p);
+		}
+}
+
+
 void testALGraphMain()
 {
 	using namespace ALG;
@@ -595,4 +653,148 @@ void testALGraphMain()
 	DFSTraverse1(g,visit);
 	BFSTraverse1(g,visit);
 	destroyGraph(g);
+}
+
+void testGraphToTree()
+{
+	ALGraph gt;
+	CSTree t;
+
+	gt.kind=UDG;//无向图
+	createGraphWithFileName(gt,"GData7.txt");
+	printGraph(gt);
+
+	DFSForest(gt,t);
+	cout<<"\n先序遍历:\n";
+	preOrderTraverse(t,visit_tree);
+	int a = 100;
+}
+
+int visited_intArr[MAX_VERTEXT_NUM];
+int count_,lowcount=1;
+int low[MAX_VERTEXT_NUM],lowOrder[MAX_VERTEXT_NUM];
+
+//从第v0个顶点出发深度优先遍历图,查找并输出关节点
+void DFSAtricul(ALGraph G,int v0)
+{
+	int min,w;
+	ArcNode *p=NULL;
+	visited_intArr[v0]=min=++count_;
+	for(p=G.vertices[v0].firstarc;p;p=p->next)
+	{
+		w=p->adjvex;
+		if(visited_intArr[w]==0)
+		{
+			DFSAtricul(G,w);
+			if(low[w]<min) min=low[w];
+			else if(low[w]>=visited_intArr[v0])
+				printf("%d %s\n",v0,G.vertices[v0].data); // 输出关节点v0
+		}
+		else if(visited_intArr[w]<min) min=visited_intArr[w];
+	}
+	low[v0]=min;
+	lowOrder[v0]=lowcount++;
+}
+
+//查找并输出图上全部关节点
+void findArticul(ALGraph G)
+{
+	int i,v;
+	ArcNode *p=NULL;
+	count_=1;
+	visited_intArr[0]=count_;
+	for(i=1;i<G.vexnum;++i) visited_intArr[i]=0;
+	p=G.vertices[0].firstarc;
+	v=p->adjvex;
+	DFSAtricul(G,v);
+	if(count_<G.vexnum)
+	{
+		printf("%d %s\n",0,G.vertices[0].data); // 根是关节点，输出根
+		while(p->next)
+		{
+			p=p->next;
+			v=p->adjvex;
+			if(visited_intArr[v]==0) DFSAtricul(G,v);
+		}
+	}
+}
+
+
+//测试连通图的关节点
+void testJoint()
+{
+	int i;
+	ALGraph gt;
+	gt.kind=UDG;//无向图
+	createGraphWithFileName(gt,"GData9.txt");
+	printGraph(gt);
+	printf("输出关节点：\n");
+	findArticul(gt);
+	printf(" i G.vertices[i].data visited[i] low[i] lowOrder[i]\n"); // 输出辅助变量
+	for(i=0;i<gt.vexnum;++i)
+		printf("%2d %9s %14d %8d %8d\n",i,gt.vertices[i].data,visited[i],low[i],lowOrder[i]);
+}
+
+//拓扑排序
+
+
+//求顶点的入度
+void findInDegree(ALGraph G,int indegree[])
+{
+	int i;
+	ArcNode *p=NULL;
+	for(i=0;i<G.vexnum;++i) indegree[i]=0;
+	for(i=0;i<G.vexnum;++i)
+	{
+		p=G.vertices[i].firstarc;
+		while(p)
+		{
+			indegree[p->adjvex]++;
+			p=p->next;
+		}
+	}
+}
+
+#include "testStack.h"
+bool topoLogicalSort(ALGraph G)
+{
+	int i,k,count=0;
+	int indegree[MAX_VERTEXT_NUM];
+	SqStack S;
+	ArcNode *p=NULL;
+	findInDegree(G,indegree);
+	initStack(S);
+	for(i=0;i<G.vexnum;++i)
+		if(!indegree[i]) pushStack(S,i);
+	while(!isStackEmpty(S))
+	{
+		popStack(S,i);
+		printf("%s ",G.vertices[i].data); // 输出i号顶点
+		++count;
+		for(p=G.vertices[i].firstarc;p;p=p->next)
+		{
+			k=p->adjvex;
+			if(!(--indegree[k])) pushStack(S,k);
+		}
+	}
+	if(count<G.vexnum)
+	{
+		printf("此有向图有回路\n");
+		return false;
+	}
+	else
+	{
+		printf("为一个拓扑序列。\n");
+		return true;
+	}
+}
+
+
+void testTopoLogicSort()
+{
+	ALGraph f;
+	f.kind=DG;
+	createGraphWithFileName(f,"GData10.txt");
+	printGraph(f);
+	topoLogicalSort(f);
 }

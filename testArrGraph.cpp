@@ -2,6 +2,8 @@
 
 #include "testArrGraph.h"
 #include "queueTest.h"
+
+using namespace AG;
 namespace AG{
 	typedef VRType QElemType;
 	//全局访问标志
@@ -561,4 +563,97 @@ void testArrGraphMain()
 		display(g);
 	}
 	destroyGraph(g);
+}
+
+
+//最小生成树的prime算法
+
+typedef struct 
+{
+	VertexType adjvex;
+	VRType lowcost;
+}miniside[MAX_VERTEXT_NUM];
+
+int minimum(miniside SZ,MGraph G)
+{
+	int i=0,j,k,min;
+	while(!SZ[i].lowcost) ++i;
+	min = SZ[i].lowcost;
+	k=i;
+	for(j=i+1;j<G.vexnum;++j)
+		if(SZ[j].lowcost>0&&min>SZ[j].lowcost)
+		{
+			min=SZ[j].lowcost;
+			k=j;
+		}
+	return k;
+}
+
+void miniSpanTree_Prim(MGraph G,VertexType u)
+{
+	int i,j,k;
+	miniside closedge;
+	k=locateVex(G,u);
+	for(j=0;j<G.vexnum;++j)
+	{
+		strcpy(closedge[j].adjvex,u);
+		closedge[j].lowcost=G.arcs[k][j].adj;
+	}
+	closedge[k].lowcost=0;
+	printf("最小代价生成树的各条边为\n");
+	for(i=1;i<G.vexnum;++i)
+	{
+		k=minimum(closedge,G);
+		printf("(%s-%s)\n",closedge[k].adjvex,G.vexs[k]); // 输出生成树的边
+		closedge[k].lowcost=0;
+		for(j=0;j<G.vexnum;++j)
+			if(G.arcs[k][j].adj<closedge[j].lowcost)
+			{
+				strcpy(closedge[j].adjvex,G.vexs[k]);
+				closedge[j].lowcost=G.arcs[k][j].adj;
+			}
+	}
+}
+void testPrime()
+{
+	MGraph g;
+	createUDN(g,"GData8.txt");
+	display(g);
+	miniSpanTree_Prim(g,g.vexs[0]);
+}
+
+void kruskal(MGraph G)
+{
+	int set[MAX_VERTEXT_NUM],i,j;
+	int k=0,a=0,b=0,min=G.arcs[a][b].adj;
+	for(i=0;i<G.vexnum;++i) set[i]=i;
+	printf("最小代价生成树的各条边为\n");
+	while(k<G.vexnum-1)
+	{
+		for(i=0;i<G.vexnum;++i)
+			for(j=i+1;j<G.vexnum;++j)
+				if(G.arcs[i][j].adj<min)
+				{
+					min=G.arcs[i][j].adj;
+					a=i;
+					b=j;
+				}
+		min=G.arcs[a][b].adj=INFINITY;
+		if(set[a]!=set[b])
+		{
+			printf("%s-%s\n",G.vexs[a],G.vexs[b]);
+			++k;
+			for(i=0;i<G.vexnum;++i)
+				if(set[i]==set[b])
+					set[i]=set[a];
+		}
+	}
+}
+
+void testCruskal()
+{
+	MGraph g;
+	createUDN(g,"GData8.txt");
+	display(g);
+	kruskal(g);
 }

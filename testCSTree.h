@@ -15,13 +15,13 @@ namespace CST{
 
 #if CHAR
 	typedef char TElemType;
-	TElemType Nil='#';
+	/*TElemType Nil='#';
 	TElemType EndFlag='\0';
-	TElemType BranchEnd=' ';
+	TElemType BranchEnd=' ';*/
 #else
 	typedef int TElemType;
-	TElemType Nil=0;
-	TElemType EndFlag=999;
+	/*TElemType Nil=0;
+	TElemType EndFlag=999;*/
 #endif
 
 #define MAX_TREE_SIZE 100
@@ -97,5 +97,7 @@ void postOrderTraverse(CSTree T,visitFunc func);
 //≤„–Ú±È¿˙
 void levelOrderTraverse(CSTree T,visitFunc func);
 
+//œ»–Ú±È¿˙
+void preOrderTraverse(CSTree T,visitFunc func);
 };
 #endif // !__TESTSQBITREE__HH_
