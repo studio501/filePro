@@ -789,7 +789,7 @@ bool topoLogicalSort(ALGraph G)
 	}
 }
 
-
+//อุฦหลละ๒
 void testTopoLogicSort()
 {
 	ALGraph f;
