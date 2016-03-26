@@ -756,6 +756,8 @@ void findInDegree(ALGraph G,int indegree[])
 }
 
 #include "testStack.h"
+//1.在有向图中选一个没有前驱的顶点输出
+//2.从图中删除该顶点和所有以它为尾的弧(重复1,2)
 bool topoLogicalSort(ALGraph G)
 {
 	int i,k,count=0;
@@ -798,3 +800,94 @@ void testTopoLogicSort()
 	printGraph(f);
 	topoLogicalSort(f);
 }
+
+//关键路径
+int ve[MAX_VERTEXT_NUM];
+bool topologicalOrder(ALGraph G,SqStack &T)
+{
+	int i,k,count=0;
+	int indegree[MAX_VERTEXT_NUM];
+	SqStack S;
+	ArcNode *p=NULL;
+	findInDegree(G,indegree);
+	initStack(S);
+	printf("拓扑序列：\n");
+	for(i=0;i<G.vexnum;++i)
+		if(!indegree[i]) pushStack(S,i);
+	initStack(T);
+	for(i=0;i<G.vexnum;++i) ve[i]=0;
+	while(!isStackEmpty(S))
+	{
+		popStack(S,i);
+		printf("%s ",G.vertices[i].data);
+		pushStack(T,i);
+		++count;
+		for(p=G.vertices[i].firstarc;p;p=p->next)
+		{
+			k=p->adjvex;
+			if(--indegree[k]==0) pushStack(S,k);
+			if(ve[i]+*(p->info)>ve[k]) ve[k]=ve[i]+*(p->info);
+		}
+	}
+	if(count<G.vexnum)
+	{
+		printf("此有向网有回路\n");
+		return false;
+	}
+	else return true;
+}
+
+//输出G的各项关键活动
+//计算弧的最早开始时间和最迟开始时间复杂度为O(e)
+//求关键路径的时间复杂度为O(n+e)
+bool criticalPath(ALGraph G)
+{
+	int vl[MAX_VERTEXT_NUM];
+	SqStack T;
+	int i,j,k,ee,e1,dut;
+	ArcNode *p=NULL;
+	if(!topologicalOrder(G,T)) return false;//有向环
+	j=ve[0];
+	for(i=1;i<G.vexnum;++i)
+		if(ve[i]>j) j=ve[i];
+	for(i=0;i<G.vexnum;++i)
+		vl[i]=j;
+	while(!isStackEmpty(T))
+		for(popStack(T,j),p=G.vertices[j].firstarc;p;p=p->next)
+		{
+			k=p->adjvex;
+			dut=*(p->info);
+			if(vl[k]-dut<vl[j]) vl[j]=vl[k]-dut;
+		}
+	printf("\ni ve[i] vl[i]\n");
+	for(i=0;i<G.vexnum;++i)
+	{
+		printf("%d %d %d",i,ve[i],vl[i]);
+		if(ve[i]==vl[i]) printf(" 关键路径经过的顶点");
+		printf("\n");
+	}
+	printf("j k 权值ee el\n");
+	for(j=0;j<G.vexnum;++j)
+		for(p=G.vertices[j].firstarc;p;p=p->next)
+		{
+			k=p->adjvex;
+			dut=*(p->info);
+			ee=ve[j];
+			e1=vl[k]-dut;
+			printf("%s→%s %3d %3d %3d ",G.vertices[j].data,G.vertices[k].data,dut,ee,e1);
+			if(ee==e1)
+				printf("关键活动");
+			printf("\n");
+		}
+	return true;
+}
+
+void testCriticalPath()
+{
+	ALGraph h;
+	h.kind=DN;
+	createGraphWithFileName(h,"GData11.txt");
+	printGraph(h);
+	criticalPath(h);
+}
+

@@ -9,7 +9,7 @@
 using namespace std;
 
 namespace AG{
-#define MAX_NAME 5
+#define MAX_NAME 20
 #define MAX_INFO 20
 #define INFINITY INT_MAX
 #define MAX_VERTEXT_NUM 26

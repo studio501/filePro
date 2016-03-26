@@ -139,7 +139,7 @@ namespace AG{
 					fin>>va>>vb>>w;
 					i=locateVex(G,va);
 					j=locateVex(G,vb);
-					G.arcs[i][j].adj=1;
+					G.arcs[i][j].adj=w;
 					if(incInfo)
 					{
 						G.arcs[i][j].info=(InfoType *)malloc(sizeof(InfoType)*MAX_INFO);
@@ -656,4 +656,190 @@ void testCruskal()
 	createUDN(g,"GData8.txt");
 	display(g);
 	kruskal(g);
+}
+
+//求最短路径
+typedef int pathPatrix[MAX_VERTEXT_NUM][MAX_VERTEXT_NUM];
+typedef int shortPathTable[MAX_VERTEXT_NUM];
+
+//用dijkstra算法求有向网G的v0顶点到其余顶点v的最短路径p[v]及带树长度
+void shortestPath_DIJ(MGraph G,int v0,pathPatrix p,shortPathTable d)
+{
+	int v,w,i,j,min;
+	bool final[MAX_VERTEXT_NUM];
+	for(v=0;v<G.vexnum;++v)
+	{
+		final[v]=false;
+		d[v]=G.arcs[v0][v].adj;
+		for(w=0;w<G.vexnum;++w)
+			p[v][w]=false;
+		if(d[v]<INFINITY)
+			p[v][v0]=p[v][v]=true;
+	}
+	d[v0]=0;
+	final[v0]=true;
+	for(i=1;i<G.vexnum;++i)
+	{
+		min=INFINITY;
+		for(w=0;w<G.vexnum;++w)
+			if(!final[w]&&d[w]<min)
+			{
+				v=w;
+				min=d[w];
+			}
+		final[v]=true;
+		for(w=0;w<G.vexnum;++w)
+			if(!final[w]&&min<INFINITY&&G.arcs[v][w].adj<INFINITY&&(min+G.arcs[v][w].adj<d[w]))
+			{
+				d[w]=min+G.arcs[v][w].adj;
+				for(j=0;j<G.vexnum;++j)
+					p[w][j]=p[v][j];
+				p[w][w]=true;
+			}
+	}
+}
+
+
+void testDijkstra()
+{
+	int i,j;
+	MGraph g;
+	pathPatrix p;
+	shortPathTable d;
+	createDN(g,"GData12.txt");
+	display(g);
+	shortestPath_DIJ(g,0,p,d);
+	printf("最短路径数组p[i][j]如下:\n");
+	for(i=0;i<g.vexnum;++i)
+	{
+		for(j=0;j<g.vexnum;++j)
+			printf("%2d",p[i][j]);
+		printf("\n");
+	}
+	printf("%s到各顶点的最短路径长度为\n",g.vexs[0]);
+	for(i=0;i<g.vexnum;++i)
+		if(i!=0)
+			if(d[i]==INFINITY) printf("%s-%s:%s\n",g.vexs[0],g.vexs[i],"∞");
+			else printf("%s-%s:%d\n",g.vexs[0],g.vexs[i],d[i]);
+			
+}
+
+//每一对顶点之前的最短路径
+
+typedef int pathMatrix[MAX_VERTEXT_NUM][MAX_VERTEXT_NUM][MAX_VERTEXT_NUM];
+typedef int distanceMatrix[MAX_VERTEXT_NUM][MAX_VERTEXT_NUM];
+
+//floyd算法求有向网v和w之间的最短路径
+void shortestPath_FLOYD(MGraph G,pathMatrix p,distanceMatrix d)
+{
+	int u,v,w,i;
+	for(v=0;v<G.vexnum;++v)
+		for(w=0;w<G.vexnum;++w)
+		{
+			d[v][w]=G.arcs[v][w].adj;
+			for(u=0;u<G.vexnum;++u) p[v][w][u]=false;
+			if(d[v][w]<INFINITY)
+				p[v][w][v]=p[v][w][w]=true;//有v到w的路径
+		}
+	for(u=0;u<G.vexnum;++u)
+		for(v=0;v<G.vexnum;++v)
+			for(w=0;w<G.vexnum;++w)
+				if(d[v][u]<INFINITY&&d[u][w]<INFINITY&&d[v][u]+d[u][w]<d[v][w])
+				{
+					d[v][w]=d[v][u]+d[u][w];
+					for(i=0;i<G.vexnum;++i)
+						p[v][w][i]=p[v][u][i]||p[u][w][i];//从v到w的路径经过人v到u和从u到w的所有路径
+				}
+}
+
+void testFloyd()
+{
+	MGraph g;
+	int i,j,k,l,m,n;
+	pathMatrix p;
+	distanceMatrix d;
+	createDN(g,"GData13.txt");
+	for(i=0;i<g.vexnum;++i)
+		g.arcs[i][i].adj=0;
+	display(g);
+	shortestPath_FLOYD(g,p,d);
+	printf("d矩阵:\n");
+	for(i=0;i<g.vexnum;++i)
+	{
+		for(j=0;j<g.vexnum;++j)
+			printf("%6d",d[i][j]);
+		printf("\n");
+	}
+	for(i=0;i<g.vexnum;++i)
+		for(j=0;j<g.vexnum;++j)
+			if(i!=j) printf("%s到%s的最短距离为%d\n",g.vexs[i],g.vexs[j],d[i][j]);
+	printf("p矩阵:\n");
+	for(i=0;i<g.vexnum;++i)
+		for(j=0;j<g.vexnum;++j)
+			if(i!=j)
+			{
+				printf("由%s到%s经过：",g.vexs[i],g.vexs[j]);
+				for(k=0;k<g.vexnum;++k)
+					if(p[i][j][k]) printf("%s ",g.vexs[k]);
+				printf("\n");
+			}
+}
+
+//地图查询
+void pathMap(MGraph G,pathMatrix p,int i,int j)
+{
+	int k;
+	int m=i;
+	printf("依次经过的城市：\n");
+	while(m!=j)
+	{
+		G.arcs[m][m].adj=INFINITY;
+		for(k=0;k<G.vexnum;++k)
+			if(G.arcs[m][k].adj<INFINITY&&p[m][j][k])
+			{
+				printf("%s ",G.vexs[m]);
+				G.arcs[m][k].adj=G.arcs[k][m].adj=INFINITY;
+				m=k;
+				break;
+			}
+	}
+}
+
+void testMapChina()
+{
+	MGraph g;
+	int i,j,k,l,q=1;
+	pathMatrix p;
+	distanceMatrix d;
+	createUDN(g,"GData14.txt");
+	for(i=0;i<g.vexnum;++i)
+		g.arcs[i][i].adj=0;
+	shortestPath_FLOYD(g,p,d);
+	while(q)
+	{
+		printf("请选择：1 查询0 结束\n");
+		cin>>q;
+		if(q)
+		{
+			for(i=0;i<g.vexnum;++i)
+			{
+				printf("%2d %-9s",i+1,g.vexs[i]);
+				if(i%6==5) // 输出6个数据就换行
+					printf("\n");
+			}
+			printf("\n请输入要查询的起点城市代码终点城市代码: ");
+			cin>>i>>j;
+			if(d[i-1][j-1]<INFINITY)
+			{
+				printf("%s到%s的最短距离为%d\n",g.vexs[i-1],g.vexs[j-1],d[i-1][j-1]);
+				pathMap(g,p,i-1,j-1); // 求最短路径上由起点城市到终点城市沿途所经过的城市
+			}
+			else
+				printf("%s到%s没有路径可通\n",g.vexs[i-1],g.vexs[j-1]);
+			/*printf("与%s到%s有关的p矩阵:\n",g.vexs[i-1],g.vexs[j-1]);
+			for(k=0;k<g.vexnum;k++)
+				printf("%2d",p[i-1][j-1][k]);*/
+			printf("\n");
+		}
+	}
 }

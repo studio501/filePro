@@ -77,6 +77,14 @@ void testJoint();
 
 void testTopoLogicSort();
 
+void testCriticalPath();
+
+void testDijkstra();
+
+void testFloyd();
+
+void testMapChina();
+
 int main(int argc, char* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
@@ -123,7 +131,11 @@ int main(int argc, char* argv[])
 	//testPrime();
 	//testCruskal();
 	//testJoint();
-	testTopoLogicSort();
+	//testTopoLogicSort();
+	//testCriticalPath();
+	//testDijkstra();
+	//testFloyd();
+	testMapChina();
 	system("pause");
 	return 0;
 }
