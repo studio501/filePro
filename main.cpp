@@ -85,6 +85,10 @@ void testFloyd();
 
 void testMapChina();
 
+void testDynamicMemory();
+
+void testBudySys();
+
 int main(int argc, char* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
@@ -135,7 +139,9 @@ int main(int argc, char* argv[])
 	//testCriticalPath();
 	//testDijkstra();
 	//testFloyd();
-	testMapChina();
+	//testMapChina();
+	//testDynamicMemory();
+	testBudySys();
 	system("pause");
 	return 0;
 }
