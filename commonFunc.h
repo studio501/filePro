@@ -43,4 +43,8 @@ T stringToNum(const string &str)
 //比较c1 c2
 int comp(int c1,int c2);
 
+#define EQ(a,b) ((a)==(b))
+#define LT(a,b) ((a)<(b))
+#define LQ(a,b) ((a)<=(b))
+
 #endif // !COMMON_FUNC__H__

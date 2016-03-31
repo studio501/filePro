@@ -89,6 +89,11 @@ void testDynamicMemory();
 
 void testBudySys();
 
+void testReclaim();
+
+void testSearchSeq();
+
+
 int main(int argc, char* argv[])
 {
 	/*cout<<diffCompute1()<<endl;
@@ -141,7 +146,9 @@ int main(int argc, char* argv[])
 	//testFloyd();
 	//testMapChina();
 	//testDynamicMemory();
-	testBudySys();
+	//testBudySys();
+	//testReclaim();
+	testSearchSeq();
 	system("pause");
 	return 0;
 }

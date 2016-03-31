@@ -89,6 +89,8 @@
     <ClInclude Include="lstringTest.h" />
     <ClInclude Include="mazeTest.h" />
     <ClInclude Include="queueTest.h" />
+    <ClInclude Include="reclaimUsenessUnit.h" />
+    <ClInclude Include="searchSeq.h" />
     <ClInclude Include="sstringTest.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -123,6 +125,8 @@
     <ClCompile Include="mazeTest.cpp" />
     <ClCompile Include="queueTest.cpp" />
     <ClCompile Include="queueTestMain.cpp" />
+    <ClCompile Include="reclaimUsenessUnit.cpp" />
+    <ClCompile Include="searchSeq.cpp" />
     <ClCompile Include="sstringTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
