@@ -127,6 +127,7 @@
     <ClCompile Include="queueTestMain.cpp" />
     <ClCompile Include="reclaimUsenessUnit.cpp" />
     <ClCompile Include="searchSeq.cpp" />
+    <ClCompile Include="searchSosTree.cpp" />
     <ClCompile Include="sstringTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

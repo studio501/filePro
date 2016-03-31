@@ -10,8 +10,8 @@
 using namespace std;
 
 //二叉树的顺序存储结构
-//#define  CHAR 0
-#define  CHAR 1
+#define  CHAR 0
+//#define  CHAR 1
 
 #if CHAR
 	typedef char TElemType;

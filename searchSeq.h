@@ -5,35 +5,13 @@
 
 #include <iostream>
 #include <fstream>
+#include <functional>
 
 #include "commonFunc.h"
 
 using namespace std;
 
-#define N 5
-typedef long keyType;
-#define key number
-struct ElemType
-{
-	long number;
-	char name[9];
-	int politics;
-	int Chinese;
-	int English;
-	int math;
-	int physics;
-	int chemistry;
-	int biology;
-	int total;
-};
 
-typedef void(*visit)(ElemType);
-
-static void print(ElemType c)
-{
-	printf("%-8ld%-8s%4d%5d%5d%5d%5d%5d%5d%5d\n",c.number,c.name,c.politics,
-		c.Chinese,c.English,c.math,c.physics,c.chemistry,c.biology,c.total);
-}
 
 template<class T>
 struct SSTable
@@ -46,6 +24,7 @@ template<class T>
 void create_Seq(SSTable<T> &ST,T r[],int n)
 {
 	int i;
+	cout<<"sizeof T is "<<sizeof(T)<<endl;
 	ST.elem = (T*)calloc(n+1,sizeof(T));//动态生成n+1个数据元素空间,0元素不用
 	if(!ST.elem) exit(0);
 	for(i=1;i<=n;++i)
@@ -95,8 +74,8 @@ bool destroy(SSTable<T> &ST)
 }
 
 //查找,返回元素位置
-template<class T>
-int search_Seq(SSTable<T> ST,keyType key_)
+template<class T,class KT>
+int search_Seq(SSTable<T> ST,KT key_)
 {
 	int i;
 	ST.elem[0].key=key_;
@@ -105,8 +84,8 @@ int search_Seq(SSTable<T> ST,keyType key_)
 }
 
 //折半查找
-template<class T>
-int seqrch_Bin(SSTable<T> ST,keyType key_)
+template<class T,class KT>
+int seqrch_Bin(SSTable<T> ST,KT key_)
 {
 	int low,high,mid;
 	low=1;
@@ -123,12 +102,14 @@ int seqrch_Bin(SSTable<T> ST,keyType key_)
 
 //遍历表
 template<class T>
-void traverse(SSTable<T> ST,visit func)
+void traverse(SSTable<T> ST, const std::function<void(const T&)> &func)
 {
 	T *p;
 	int i;
 	p=++ST.elem;
 	for(i=1;i<=ST.lenght;++i)
-		func(*p++);
+		//func(*p++);
+		func(ST.elem[i-1]);
 }
+
 #endif

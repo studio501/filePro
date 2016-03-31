@@ -67,7 +67,7 @@ void toolMain(int argc, char* argv[]);
 
 void testAMLGraphMain();
 
-void testGraphToTree();
+void testGraphToTree();//需要将testCSTree.h 中将 CHAR 预定义为1
 
 void testPrime();
 
@@ -93,6 +93,13 @@ void testReclaim();
 
 void testSearchSeq();
 
+void testSosTree();
+
+//template <typename T>
+//void test_size()
+//{
+//	printf("size is %d \n", sizeof(T));
+//}
 
 int main(int argc, char* argv[])
 {
@@ -136,7 +143,7 @@ int main(int argc, char* argv[])
 	//includeMain();
 	//include1Main();
 	//testAMLGraphMain();
-	//testGraphToTree();
+	//testGraphToTree(); //需要将testCSTree.h 中将 CHAR 预定义为1
 	//testPrime();
 	//testCruskal();
 	//testJoint();
@@ -148,7 +155,10 @@ int main(int argc, char* argv[])
 	//testDynamicMemory();
 	//testBudySys();
 	//testReclaim();
-	testSearchSeq();
+	//testSearchSeq();
+	testSosTree();
+
+
 	system("pause");
 	return 0;
 }
