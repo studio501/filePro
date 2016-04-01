@@ -84,8 +84,11 @@
     <ClInclude Include="dymemory.h" />
     <ClInclude Include="dymemory1.h" />
     <ClInclude Include="GList.h" />
+    <ClInclude Include="hashTable.h" />
     <ClInclude Include="hstringTest.h" />
     <ClInclude Include="huffmanTree.h" />
+    <ClInclude Include="insertSort.h" />
+    <ClInclude Include="keyTree.h" />
     <ClInclude Include="listConfig.h" />
     <ClInclude Include="lQueueTest.h" />
     <ClInclude Include="lstringTest.h" />
@@ -94,6 +97,7 @@
     <ClInclude Include="reclaimUsenessUnit.h" />
     <ClInclude Include="searchSeq.h" />
     <ClInclude Include="sstringTest.h" />
+    <ClInclude Include="stackCommon.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testALGraph.h" />
@@ -122,8 +126,11 @@
     <ClCompile Include="dySearchTree.cpp" />
     <ClCompile Include="fileTest.cpp" />
     <ClCompile Include="GList.cpp" />
+    <ClCompile Include="hashTable.cpp" />
     <ClCompile Include="hstringTest.cpp" />
     <ClCompile Include="huffmanTree.cpp" />
+    <ClCompile Include="insertSort.cpp" />
+    <ClCompile Include="keyTree.cpp" />
     <ClCompile Include="lQueueTestMain.cpp" />
     <ClCompile Include="lstringTest.cpp" />
     <ClCompile Include="main.cpp" />

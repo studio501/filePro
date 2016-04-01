@@ -101,6 +101,12 @@ void testbfSearchTree();
 
 void testB_Tree();
 
+void testKeyTree();
+
+void testHashTable();
+
+void testInsertSort();
+
 //template <typename T>
 //void test_size()
 //{
@@ -165,8 +171,10 @@ int main(int argc, char* argv[])
 	//testSosTree();
 	//testDySearchTree();
 	//testbfSearchTree();
-	testB_Tree();
-
+	//testB_Tree();
+	//testKeyTree();
+	//testHashTable();
+	testInsertSort();
 
 	system("pause");
 	return 0;
