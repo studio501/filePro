@@ -27,4 +27,11 @@ void testInsertSort()
 	insertSort(l1);
 	printf("直接插入排序后:\n");
 	print(l1);
+	BInsertSort(l2);
+	printf("折半插入排序后:\n");
+	print(l2);
+	printf("2_路插入排序后:\n");
+	p2_insertSort(l3);
+	print(l3);
+
 }
