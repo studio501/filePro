@@ -76,6 +76,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="biTreeCommon.h" />
+    <ClInclude Include="b_tree.h" />
     <ClInclude Include="commonFunc.h" />
     <ClInclude Include="DSList.h" />
     <ClInclude Include="DSList.hpp" />
@@ -112,9 +114,12 @@
     <ClInclude Include="testStack.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bfSearchTree.cpp" />
+    <ClCompile Include="b_tree.cpp" />
     <ClCompile Include="commonFunc.cpp" />
     <ClCompile Include="dymemory.cpp" />
     <ClCompile Include="dymemory1.cpp" />
+    <ClCompile Include="dySearchTree.cpp" />
     <ClCompile Include="fileTest.cpp" />
     <ClCompile Include="GList.cpp" />
     <ClCompile Include="hstringTest.cpp" />

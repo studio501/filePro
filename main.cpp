@@ -95,6 +95,12 @@ void testSearchSeq();
 
 void testSosTree();
 
+void testDySearchTree();
+
+void testbfSearchTree();
+
+void testB_Tree();
+
 //template <typename T>
 //void test_size()
 //{
@@ -156,7 +162,10 @@ int main(int argc, char* argv[])
 	//testBudySys();
 	//testReclaim();
 	//testSearchSeq();
-	testSosTree();
+	//testSosTree();
+	//testDySearchTree();
+	//testbfSearchTree();
+	testB_Tree();
 
 
 	system("pause");
