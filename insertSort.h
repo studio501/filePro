@@ -456,10 +456,8 @@ void mergeSort(SQLIST &L)
 	msort(L.r,L.r,1,L.length);
 }
 
-
-//Á´Ê½»ùÊýÅÅÐò
 template<class IT>
-void intiList_(SLLIST &L,RDT D[],int n)
+void intiList1_(SLLIST &L,RDT D[],int n)
 {
 	char c[MAX_NUM_OF_KEY],c1[MAX_NUM_OF_KEY];
 	int i,j,max=D[0].key;
@@ -471,7 +469,7 @@ void intiList_(SLLIST &L,RDT D[],int n)
 	for(i=1;i<=n;++i)
 	{
 		L.r[i].otheritems=D[i-1].otherinfo;
-		itoa(D[i-1].key,c,10);
+		_itoa(D[i-1].key,c,10);
 		for(j=strlen(c);j<L.keynum;++j)
 		{
 			strcpy(c1,"0");
@@ -561,7 +559,7 @@ void sRearrange(SLLIST &L,int adr[])
 {
 	int i,j,k;
 	for(i=1;i<L.recnum;++i)
-		if(adr[j]!=i)
+		if(adr[i]!=i)
 		{
 			j=i;
 			L.r[0]=L.r[i];

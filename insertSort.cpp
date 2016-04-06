@@ -8,6 +8,7 @@
 #define mySLNODE SLNode<int>
 #define mySLKT SLinkListType<int>
 
+
 static void print(const mySQLIST & L)
 {
 	int i;
@@ -139,9 +140,16 @@ void testInsertSort()
 
 	myRDT d3[N+2]={{278,1},{109,2},{63,3},{930,4},{589,5},{184,6},{505,7},{269,8},{8,9},{83,10}};
 	mySLLIST l10;
-	int *adr;
-	//intiList_(l10,d3,N+2);
-
-
-	
+	int *adr1;
+	intiList1_(l10,d3,N+2);
+	printf("排序前(next域还没赋值):\n");
+	print5(l10);
+	radixSort<int>(l10,print4);
+	printf("排序后(静态链表):\n");
+	print5(l10);
+	adr1=(int*)malloc(l10.recnum*sizeof(int));
+	sSort(l10,adr1);
+	sRearrange(l10,adr1);
+	printf("排序后(重排记录):\n");
+	print5(l10);
 }
