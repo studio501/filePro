@@ -107,6 +107,8 @@ void testHashTable();
 
 void testInsertSort();
 
+void testRandom();
+
 //template <typename T>
 //void test_size()
 //{
@@ -174,7 +176,8 @@ int main(int argc, char* argv[])
 	//testB_Tree();
 	//testKeyTree();
 	//testHashTable();
-	testInsertSort();
+	//testInsertSort();
+	testRandom();
 
 	system("pause");
 	return 0;

@@ -157,6 +157,7 @@
     <ClCompile Include="testList.cpp" />
     <ClCompile Include="testListMain.cpp" />
     <ClCompile Include="testOLGraph.cpp" />
+    <ClCompile Include="testRandom.cpp" />
     <ClCompile Include="testRLSMatrix.cpp" />
     <ClCompile Include="testSqBiTree.cpp" />
     <ClCompile Include="testSqTree.cpp" />
