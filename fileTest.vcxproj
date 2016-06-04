@@ -96,10 +96,15 @@
     <ClInclude Include="queueTest.h" />
     <ClInclude Include="reclaimUsenessUnit.h" />
     <ClInclude Include="searchSeq.h" />
+    <ClInclude Include="singleton.h" />
+    <ClInclude Include="singletonA.h" />
+    <ClInclude Include="singletonB.h" />
     <ClInclude Include="sstringTest.h" />
     <ClInclude Include="stackCommon.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="String.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="temp.h" />
     <ClInclude Include="testALGraph.h" />
     <ClInclude Include="testAMLGraph.h" />
     <ClInclude Include="testArray.h" />
@@ -121,10 +126,13 @@
     <ClCompile Include="bfSearchTree.cpp" />
     <ClCompile Include="b_tree.cpp" />
     <ClCompile Include="commonFunc.cpp" />
+    <ClCompile Include="design_factory.cpp" />
+    <ClCompile Include="design_strategy.cpp" />
     <ClCompile Include="dymemory.cpp" />
     <ClCompile Include="dymemory1.cpp" />
     <ClCompile Include="dySearchTree.cpp" />
     <ClCompile Include="fileTest.cpp" />
+    <ClCompile Include="force.cpp" />
     <ClCompile Include="GList.cpp" />
     <ClCompile Include="hashTable.cpp" />
     <ClCompile Include="hstringTest.cpp" />
@@ -144,6 +152,8 @@
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="String.cpp" />
+    <ClCompile Include="temp.cpp" />
     <ClCompile Include="testALGraph.cpp" />
     <ClCompile Include="testAMLGraph.cpp" />
     <ClCompile Include="testArray.cpp" />

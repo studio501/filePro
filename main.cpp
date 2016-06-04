@@ -109,6 +109,14 @@ void testInsertSort();
 
 void testRandom();
 
+void testFactory();
+
+void testStratedy();
+
+void testAdapter();
+
+void testDesign();
+
 //template <typename T>
 //void test_size()
 //{
@@ -177,7 +185,11 @@ int main(int argc, char* argv[])
 	//testKeyTree();
 	//testHashTable();
 	//testInsertSort();
-	testRandom();
+	//testRandom();
+	//testFactory();
+	//testStratedy();
+	//testAdapter();
+	testDesign();
 
 	system("pause");
 	return 0;
