@@ -102,3 +102,4 @@ const char * String::c_str()
 {
 	return str+1;
 }
+

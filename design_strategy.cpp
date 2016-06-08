@@ -1201,11 +1201,625 @@ void testTemplate1()
 	a22.invoke(func*/
 }
 
+//////////////////////////////////////////////////////////////////////////
+#include <iomanip>
+void codeFunc(int i)
+{
+	if(i>5) cout<<"more"<<endl;
+	else cout<<"less"<<endl;
+}
+
+void showCode(unsigned char * pi)
+{
+	unsigned char * keep = pi;
+	int tmp = *pi;
+	unsigned long exp;
+	if(tmp==233)
+	{
+		unsigned long addr = 0L;
+		exp=1;
+		for(int i=0;i<4;++i)
+		{
+			pi++;
+			tmp=int(*pi);
+			addr +=tmp*exp;
+			exp*=256;
+		}
+		addr +=int(keep)+5;
+		showCode((unsigned char *)addr);
+	}
+	else
+	{
+		for(int i=0;i<4;++i)
+		{
+			cout<<setfill('0');
+			cout<<"0X"<<setw(8)<<hex<<int(pi)<<":";
+			for(int j=0;j<10;++j)
+			{
+				tmp=*(pi++);
+				cout<<setw(2)<<hex<<tmp<<" ";
+			}
+			cout<<endl;
+		}
+	}
+}
+
+void testPrintCode()
+{
+	void (*pf1)(int);
+	pf1 = codeFunc;
+	unsigned char * pi = (unsigned char *)pf1;
+	showCode(pi);
+}
 
 
 //////////////////////////////////////////////////////////////////////////
+
+int *testStackCapacityAddr;
+int testStackCapacityCount;
+
+void testStackCapacityFunc(int i)
+{
+	cout<<testStackCapacityCount<<" : "<<(int)testStackCapacityAddr - int(&i)<<endl;
+	testStackCapacityCount++;
+	testStackCapacityAddr = &i;
+	testStackCapacityFunc(i);
+}
+
+void testStackCapacity()
+{
+	int i;
+	testStackCapacityAddr = &i;
+	testStackCapacityFunc(2);
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+
+class theMemoryPool;
+
+class ActualClass
+{
+	static int count;
+	int num[10];
+public:
+	ActualClass()
+	{
+		count++;
+		for(int i=0;i<10;++i)
+			num[i]=count+i;
+	}
+
+	void show()
+	{
+		cout<<this<<" : ";
+		for(int i=0;i<10;++i)
+			cout<<num[i]<<" ";
+		cout<<endl;
+	}
+
+	void * operator new(size_t size);
+	
+
+	void operator delete(void *p);
+};
+
+class theMemoryPool
+{
+	static MemPool<sizeof(ActualClass),2> mp;
+	friend class ActualClass;
+};
+
+void * ActualClass::operator new(size_t size)
+{
+	return theMemoryPool::mp.malloc();
+}
+
+void ActualClass::operator delete(void *p)
+{
+	theMemoryPool::mp.free(p);
+}
+
+MemPool<sizeof(ActualClass),2> theMemoryPool::mp;
+int ActualClass::count;
+
+void testMemPool()
+{
+	ActualClass *p1 = new ActualClass;
+	p1->show();
+	ActualClass *p2 = new ActualClass;
+	p2->show();
+	delete p1;
+	p1 = new ActualClass;
+	p1->show();
+	ActualClass *p3 = new ActualClass;
+	p3->show();
+	delete p1;
+	delete p2;
+	delete p3;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+class PA
+{
+	int i;
+	char c;
+	void privateFunc()
+	{
+		cout<<"this is a private function of base class "<<endl;
+	}
+public:
+	PA()
+		:i(5)
+		,c('a')
+	{
+
+	}
+};
+
+class PB : public PA
+{
+public:
+	void printBaseI()
+	{
+		int *p = reinterpret_cast<int *>(this);
+		cout<<*p<<endl;
+
+		char *pc = reinterpret_cast<char *>(this);
+		cout<<*(pc+sizeof(int))<<endl;
+	}
+
+	void usePrivateFunction()
+	{
+		void(*funcp)();
+		__asm{
+			mov eax,PA::privateFunc
+			mov funcp,eax
+		}
+		funcp();
+	}
+};
+
+void testPrivate()
+{
+	PB b;
+	b.printBaseI();
+	b.usePrivateFunction();
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+#define SFA(function) __asm{\
+	mov eax,function}\
+	__asm{mov p,eax}\
+	cout<<"In SFA Address of "#function" is 0x"<<p<<endl;
+
+void showvtableContent(char * className,void *pObj,int index)
+{
+	unsigned long *pAddr;
+	pAddr = reinterpret_cast<unsigned long *>(pObj);
+	pAddr = (unsigned long *)*pAddr;
+	cout<<"the content of "<<className<<"'s vtable["<<index<<"]";
+	cout<<"is 0x"<<(void *)pAddr[index]<<endl;
+}
+
+class Base
+{
+	int i;
+public:
+	virtual void f1()
+	{
+		cout<<"Base's f1()"<<endl;
+	}
+	virtual void f2()
+	{
+		cout<<"Base's f2()"<<endl;
+	}
+	virtual void f3()
+	{
+		cout<<"Base's f3()"<<endl;
+	}
+};
+
+class Derived : public Base
+{
+public:
+
+	virtual void f4()
+	{
+		cout<<"Derived's f4()"<<endl;
+	}
+	void f3()
+	{
+		cout<<"Derived's f3()"<<endl;
+	}
+	void f1()
+	{
+		cout<<"Derived's f1()"<<endl;
+	}
+};
+
+void testvtbl()
+{
+	Base b1;
+	Derived d1;
+	void * p;
+	unsigned long *pAddr;
+	pAddr = reinterpret_cast<unsigned long *>(&b1);
+	cout<<"addres of vtable of base is 0x"<<(void *)*pAddr<<endl;
+	pAddr = reinterpret_cast<unsigned long *>(&d1);
+	cout<<"address of vtable of derived is 0x"<<(void *)*pAddr<<endl;
+	SFA(Base::f1);
+	showvtableContent("Base",&b1,0);
+	SFA(Base::f2);
+	showvtableContent("Base",&b1,1);
+	SFA(Base::f3);
+	showvtableContent("Base",&b1,2);
+
+	cout<<"==========================="<<endl;
+	SFA(Derived::f1);
+	showvtableContent("Derived",&d1,0);
+	SFA(Derived::f2);
+	showvtableContent("Derived",&d1,1);
+	SFA(Derived::f3);
+	showvtableContent("Derived",&d1,2);
+	SFA(Derived::f4);
+	showvtableContent("Derived",&d1,3);
+	
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+class A3
+{
+	int num[3];
+public:
+	A3()
+	{
+		num[0]=1;
+		num[1]=2;
+		num[2]=3;
+	}
+	int & operator[](int sub)
+	{
+		if(sub<0 || sub >2)
+			throw sub;
+		else
+			return num[sub];
+	}
+};
+
+void testArrIndex()
+{
+	A3 a;
+	A3 *p = &a;
+	try
+	{
+		for(int i=0;i<=4;++i)
+			cout<<p[0][i]<<endl;
+	}
+	catch(int sub)
+	{
+		cout<<"subscript out of range : "<<sub<<endl;
+	}
+
+	int arr[3] = {1,2,3};
+	cout<<1[arr]<<endl;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+template<class T>
+class data_container
+{
+	T * p;
+public:
+	data_container(T * inp)
+	{
+		p = inp;
+	}
+	~data_container()
+	{
+		delete p;
+	}
+// 	template<class T>
+// 	friend T operator *(const data_container<T> &);
+	T operator*()
+	{
+		return *p;
+	}
+};
+
+template<class T>
+T operator*(const data_container<T> &d)
+{
+	return *(d.p);
+}
+
+void testDept()
+{
+	data_container<int> id(new int(5));
+	data_container<double> dd(new double(7.8));
+	cout<<*id<<" "<<*dd<<endl;
+}
+
+//////////////////////////////////////////////////////////////////////////
+ostream & Tab(ostream &outs)
+{
+	for(int i=0;i<4;++i)
+		outs<<"-";
+	return outs;
+}
+
+ostream & Money(ostream &outs)
+{
+	outs<<left<<'$'<<setw(12)<<setfill('#');
+	return outs;
+}
+
+ostream & Fuck(ostream &outs)
+{
+	outs<<"fuck you";
+	return outs;
+}
+
+
+void testCustomSymbol()
+{
+	double amount = 1.23456;
+	cout<<"the amount is"<<Tab<<Money<<amount<<endl;
+	cout<<Fuck<<endl;
+}
+
+//////////////////////////////////////////////////////////////////////////
+#include <conio.h>
+
+
+
+void testNoEasySave()
+{
+	char c[6];
+	cout<<"please input password: ";
+	for(int i=0;i<5;++i)
+	{
+		c[i]=_getch();
+		cout<<"*";
+	}
+	cout<<endl;
+	c[5]='\0';
+	if(string(c)=="hello")
+		cout<<"your password are right";
+	else
+		cout<<"your password are wrong";
+}
+//////////////////////////////////////////////////////////////////////////
+
+#include <locale>
+void testLocale()
+{
+	locale native("");
+	locale usa("American_USA.1252");
+	locale Holland("Dutch");
+	locale global;
+	cout<<"native: "<<native.name()<<endl;
+	cout<<"classic : "<<locale::classic().name()<<endl;
+	cout<<"global: "<<global.name()<<endl;
+	cout<<"Holland: "<<Holland.name()<<endl;
+	cout<<"usa: "<<usa.name()<<endl;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+#include <fstream>
+void testCharCode()
+{
+	char str1[10] = "ABC我们";
+	wchar_t str2[10] = L"ABC我们";
+	ofstream file1("df1.txt",ios_base::out);
+	file1<<str1;
+	file1.close();
+	wofstream file2("df2.txt",ios_base::out);
+	file2.imbue(locale("CHS"));
+	file2<<str2;
+	file2.close();
+	ofstream file3("df3.txt",ios_base::out);
+	short flag = 0xFEFF;
+	file3.write((char *)&flag,sizeof(short));
+	file3.write((char *)str2,wcslen(str2)*2);
+	file3.close();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+#include <string>
+#include <locale.h>
+using namespace std;
+static string ws2s(const wstring &ws)
+{
+	size_t convertedChars=0;
+	string curLocale = setlocale(LC_ALL,NULL);
+	setlocale(LC_ALL,"chs");
+	const wchar_t * _Source = ws.c_str();
+	size_t _Dsize = 2*ws.size()+1;
+	char * _Dest = new char[_Dsize];
+	wcstombs_s(&convertedChars,_Dest,_Dsize,_Source,_TRUNCATE);
+	string result = _Dest;
+	delete [] _Dest;
+	setlocale(LC_ALL,curLocale.c_str());
+	return result;
+}
+
+static wstring s2ws(const string &s)
+{
+	size_t convertedChars=0;
+	setlocale(LC_ALL,"chs");
+	const char * _Source = s.c_str();
+	size_t _Dsize = s.size()+1;
+	wchar_t * _Dest = new wchar_t[_Dsize];
+	mbstowcs_s(&convertedChars,_Dest,_Dsize,_Source,_TRUNCATE);
+	wstring result = _Dest;
+	delete []_Dest;
+	setlocale(LC_ALL,"C");
+	return result;
+}
+void testS_2_Ws_convert()
+{
+	wchar_t *wstr = L"ABC我们";
+	cout<<wstr<<endl;
+	string obj(ws2s(wstr));
+	cout<<obj<<endl;
+
+	char * str = "ABC我们";
+	wcout<<str<<endl;
+	wstring wobj(s2ws(str));
+	wcout<<wobj<<endl;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+#include <ctime>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <cerrno>
+#include <cstring>
+void testFileInfo()
+{
+	struct stat fileInfo;
+	char message[30];
+	if(stat("df1.txt",&fileInfo)!=0)
+	{
+		cout<<"error"<<endl;
+	}
+	cout<<fileInfo.st_size<<" "<<(char)(fileInfo.st_dev+'A')<<endl;
+	ctime_s(message,29,&fileInfo.st_ctime);
+	cout<<message<<endl;
+	ctime_s(message,29,&fileInfo.st_mtime);
+	cout<<message<<endl;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+#include <direct.h>
+#include <errno.h>
+#include <cstdio>
+void testFileOpts()
+{
+	char filepath[100];
+	char *forcestr;
+	_getcwd(filepath,99);
+	cout<<filepath<<endl;
+
+	forcestr = _getcwd(NULL,0);
+	cout<<forcestr<<endl;
+
+	if(forcestr) free(forcestr);
+
+	if(_chdir(".."))
+	{
+		switch(errno)
+		{
+		case ENOENT:
+			cout<<"unable to locate the directory"<<endl;
+			break;
+		case EINVAL:
+			cout<<"invalid buffer"<<endl;
+			break;
+		default:
+			cout<<"unknown error"<<endl;
+			break;
+		}
+	}
+	else
+	{
+		forcestr = _getcwd(NULL,0);
+		cout<<forcestr<<endl;
+		if(forcestr) free(forcestr);
+	}
+	_chdir("./filePro");
+
+	rename("df2.txt","df22.txt");
+	remove("df3.txt");
+	_mkdir("test");
+	_rmdir("test");
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void testBinaryFile()
+{
+	ofstream fout("bfile1.dat",ios::binary);
+	/*int num = 30;
+	fout.write((char *)(&num),sizeof(num));*/
+	
+
+	struct OBj
+	{
+		int number;
+		char letter;
+	}obj;
+	obj.number=109;
+	obj.letter='M';
+	
+	fout.write((char*)(&obj),sizeof(obj));
+
+	OBj obj1;
+	obj1.number=200;
+	obj1.letter='B';
+	fout.write((char*)(&obj1),sizeof(obj1));
+	fout.close();
+
+	ifstream fin("bfile1.dat",ios::binary);
+	OBj obj2;
+	fin.read((char*)(&obj2),sizeof(obj2));
+	fin.read((char*)(&obj2),sizeof(obj2));
+	cout<<obj2.number<<" "<<obj2.letter<<endl;
+	fin.close();
+
+	fin.open("bfile1.dat",ios_base::in | ios_base::binary);
+	fout.open("copyofbf1.dat",ios_base::out | ios_base::binary);
+	if(!fin || !fout) cout<<"open file error"<<endl;
+	char buf[1];
+	do 
+	{
+		fin.read(&buf[0],1);
+		fout.write(&buf[0],fin.gcount());
+	} while (fin.gcount()>0);
+	fin.close();
+	fout.close();
+
+	cout<<__FILE__<<__FUNCTION__<<__LINE__<<endl;
+}
+
+//////////////////////////////////////////////////////////////////////////
+#include "dynamic.h"
+void testDll()
+{
+	ReUse1 r1;
+	r1.Effect();
+
+	ReUse2 r2;
+	r2.Output("hhh");
+}
+//////////////////////////////////////////////////////////////////////////
 void testDesign()
 {
+	testDll();
+	//testBinaryFile();
+	//testFileOpts();
+	//testFileInfo();
+	//testS_2_Ws_convert();
+	//testCharCode();
+	//testLocale();
+	//testNoEasySave();
+	//testCustomSymbol();
+	//testDept();
+	//testArrIndex();
+	//testvtbl();
+	//testPrivate();
+	//testMemPool();
+	//testStackCapacity();
+	//testPrintCode();
 	//testStratedy();
 	//testAdapter();
 	//testSingleton();
@@ -1225,5 +1839,5 @@ void testDesign()
 	//testmultiArr();
 	//testMemberDataPointer();
 	//testHandle();
-	testTemplate1();
+	//testTemplate1();
 }
